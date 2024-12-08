@@ -389,7 +389,7 @@ class BestsellerWindow:
             clear_window(self.window)  # Use clear_window directly
             import sys
             sys.path.append(str(Path(__file__).parent / "products"))
-            from Buffalo_wings import create_buffalo_wings_content
+            from Buffalo_wings import create_buffalo_wings_content 
             create_buffalo_wings_content(self.window)
             print("Buffalo Wings opened successfully.")
         except Exception as e:
