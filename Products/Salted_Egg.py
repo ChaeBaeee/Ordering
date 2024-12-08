@@ -3,7 +3,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
-from cart import create_cart_content  # Import the function
+from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -16,6 +16,9 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def create_salted_egg_content(window):
+    items = load_items()  # Refresh items from database
+    salted_egg_price = items["Salted Egg"]["price"]  # Get the price of Salted Egg
+    salted_egg_stock = items["Salted Egg"]["stock"]  # Get the stock of Salted Egg
     print("Creating Salted Egg content...")
     window.geometry("507x782")
     window.configure(bg = "#F2C94C")
@@ -46,7 +49,7 @@ def create_salted_egg_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: add_to_cart("Salted Egg", quantity),  # Add Salted Egg to cart with quantity
         relief="flat"
     )
     button_1.place(
@@ -85,7 +88,16 @@ def create_salted_egg_content(window):
         42.4671630859375,
         417.8766174316406,
         anchor="nw",
-        text="Php 999 ",
+        text=f"Php {salted_egg_price}",  # Use the dynamic price
+        fill="#000000",
+        font=("Abril Fatface", 20 * -1)
+    )
+
+    canvas.create_text(
+        42.4671630859375,
+        450.8766174316406,
+        anchor="nw",
+        text=f"Stock: {salted_egg_stock}",  # Display the stock
         fill="#000000",
         font=("Abril Fatface", 20 * -1)
     )

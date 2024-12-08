@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
+from cart import load_cart, load_items  # Add the missing imports
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -34,7 +35,7 @@ def create_other_flavors_content(window):
         149.5185546875,
         220.48944091796875,
         anchor="nw",
-        text="Honey Siracha",
+        text="Honey Sriracha",
         fill="#000000",
         font=("Abril Fatface", 14 * -1)
     )
@@ -70,7 +71,7 @@ def create_other_flavors_content(window):
         147.785400390625,
         438.2608642578125,
         anchor="nw",
-        text="Sesame Honey",
+        text="Orange Glaze",
         fill="#000000",
         font=("Abril Fatface", 14 * -1)
     )
@@ -79,7 +80,7 @@ def create_other_flavors_content(window):
         341.435546875,
         439.9595642089844,
         anchor="nw",
-        text="Orange Glaze",
+        text="Sesame Honey",
         fill="#000000",
         font=("Abril Fatface", 14 * -1)
     )
@@ -190,7 +191,7 @@ def create_other_flavors_content(window):
         height=148.88937377929688
     )
 
-    button_image_6 = PhotoImage(file=relative_to_assets("button_6.png"))
+    button_image_6 = PhotoImage(file=relative_to_assets("button_7.png"))
     button_6 = Button(
         image=button_image_6,
         borderwidth=0,
@@ -206,7 +207,7 @@ def create_other_flavors_content(window):
         height=148.88937377929688
     )
 
-    button_image_7 = PhotoImage(file=relative_to_assets("button_7.png"))
+    button_image_7 = PhotoImage(file=relative_to_assets("button_6.png"))
     button_7 = Button(
         image=button_image_7,
         borderwidth=0,
@@ -263,28 +264,6 @@ def create_other_flavors_content(window):
         width=124.00406646728516,
         height=38.58948516845703
     )
-
-    # Add text to display the order total
-    canvas.create_text(
-        203.84228515625,
-        716.8453369140625,
-        anchor="nw",
-        text="Order Total",
-        fill="#FBFBFB",
-        font=("Abril Fatface", 18 * -1)
-    )
-
-    order_total_text = canvas.create_text(
-        203.84228515625,
-        737.2295532226562,
-        anchor="nw",
-        text="P 999",
-        fill="#FBFBFB",
-        font=("Abril Fatface", 18 * -1)
-    )
-
-    # Keep a reference to the text item to update it later
-    window.order_total_text = order_total_text
 
     # Keep a reference to the images to prevent garbage collection
     window.button_images = [button_image_1, button_image_2, button_image_3, button_image_4, button_image_5, button_image_6, button_image_7, button_image_8, button_image_9]

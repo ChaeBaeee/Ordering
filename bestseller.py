@@ -19,6 +19,13 @@ def clear_window(window):
     for widget in window.winfo_children():
         widget.destroy()
 
+def calculate_order_total():
+    from cart import load_cart, load_items
+    cart = load_cart()
+    items = load_items()
+    total = sum(item["quantity"] * items[item["item"]]["price"] for item in cart)
+    return total
+
 class BestsellerWindow:
     def __init__(self, window):
         self.window = window
@@ -370,11 +377,13 @@ class BestsellerWindow:
                 font=("Abril Fatface", 18 * -1)
             )
 
+            order_total = calculate_order_total()  # Calculate the order total
+
             canvas.create_text(
                 203.84228515625,
                 737.2295532226562,
                 anchor="nw",
-                text="P 999",
+                text=f"P {order_total}",  # Use the dynamic order total
                 fill="#FBFBFB",
                 font=("Abril Fatface", 18 * -1)
             )

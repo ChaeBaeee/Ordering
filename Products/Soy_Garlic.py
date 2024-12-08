@@ -8,7 +8,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content  # Import the function
-from cart import create_cart_content  # Import the function
+from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame11")
@@ -19,7 +19,13 @@ def relative_to_assets(path: str) -> Path:
 
 
 def create_soy_garlic_content(window):
+    items = load_items()  # Refresh items from database
+    soy_garlic_price = items["Soy Garlic"]["price"]  # Get the price of Soy Garlic
+    soy_garlic_stock = items["Soy Garlic"]["stock"]  # Get the stock of Soy Garlic
     print("Creating Soy Garlic content...")
+    for widget in window.winfo_children():
+        widget.destroy()  # Clear existing content
+
     window.geometry("507x782")
     window.configure(bg = "#8B4513")
 
@@ -34,22 +40,14 @@ def create_soy_garlic_content(window):
     )
 
     canvas.place(x = 0, y = 0)
-    canvas.create_text(
-        558.1048583984375,
-        238.781005859375,
-        anchor="nw",
-        text="Burger",
-        fill="#000000",
-        font=("Abril Fatface", 12 * -1)
-    )
-
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
     button_1 = Button(
+        window,
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: add_to_cart("Soy Garlic", quantity) or print(f"Added {quantity} Soy Garlic to cart"),  # Add Soy Garlic to cart with quantity and print confirmation
         relief="flat"
     )
     button_1.place(
@@ -62,6 +60,7 @@ def create_soy_garlic_content(window):
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
     button_2 = Button(
+        window,
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
@@ -104,7 +103,7 @@ def create_soy_garlic_content(window):
         42.4671630859375,
         417.876708984375,
         anchor="nw",
-        text="Php 999 ",
+        text=f"Php {soy_garlic_price}",  # Use the dynamic price
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
@@ -139,13 +138,14 @@ def create_soy_garlic_content(window):
         723.2791748046875,
         anchor="nw",
         text=str(quantity),
-        fill="#000000",
+        fill="#FFFFFF",
         font=("Abril Fatface", 18 * -1)
     )
 
     button_image_3 = PhotoImage(
         file=relative_to_assets("button_3.png"))
     button_3 = Button(
+        window,
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
@@ -162,6 +162,7 @@ def create_soy_garlic_content(window):
     button_image_4 = PhotoImage(
         file=relative_to_assets("button_4.png"))
     button_4 = Button(
+        window,
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
@@ -199,6 +200,8 @@ def create_soy_garlic_content(window):
         width=33.0,
         height=29.0
     )
+
+    # Keep a reference to the images to prevent garbage collection
 
     # Keep a reference to the images to prevent garbage collection
     window.button_images = [button_image_1, button_image_2, button_image_3, button_image_4, button_image_5, image_image_1]

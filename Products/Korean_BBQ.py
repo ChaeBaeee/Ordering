@@ -8,7 +8,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content  # Import the function
-from cart import create_cart_content  # Import the function
+from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -20,6 +20,9 @@ def relative_to_assets(path: str) -> Path:
 
 
 def create_korean_bbq_content(window):
+    items = load_items()  # Refresh items from database
+    korean_bbq_price = items["Korean BBQ"]["price"]  # Get the price of Korean BBQ
+    korean_bbq_stock = items["Korean BBQ"]["stock"]  # Get the stock of Korean BBQ
     print("Creating Korean BBQ content...")
     window.geometry("507x782")
     window.configure(bg = "#2E2E2E")
@@ -50,7 +53,7 @@ def create_korean_bbq_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: add_to_cart("Korean BBQ", quantity),  # Add Korean BBQ to cart with quantity
         relief="flat"
     )
     button_1.place(
@@ -105,10 +108,11 @@ def create_korean_bbq_content(window):
         42.4671630859375,
         417.87646484375,
         anchor="nw",
-        text="Php 999 ",
+        text=f"Php {korean_bbq_price}",  # Use the dynamic price
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
+
 
     canvas.create_text(
         35.6724853515625,

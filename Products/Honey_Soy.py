@@ -3,7 +3,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
-from cart import create_cart_content  # Import the function
+from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -16,7 +16,13 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def create_honey_soy_content(window):
+    items = load_items()  # Refresh items from database
+    honey_soy_price = items["Honey Soy"]["price"]  # Get the price of Honey Soy
+    honey_soy_stock = items["Honey Soy"]["stock"]  # Get the stock of Honey Soy
     print("Creating Honey Soy content...")
+    for widget in window.winfo_children():
+        widget.destroy()  # Clear existing content
+
     window.geometry("507x782")
     window.configure(bg = "#A91B0D")
 
@@ -31,22 +37,14 @@ def create_honey_soy_content(window):
     )
 
     canvas.place(x = 0, y = 0)
-    canvas.create_text(
-        558.1048583984375,
-        238.780517578125,
-        anchor="nw",
-        text="Burger",
-        fill="#000000",
-        font=("Abril Fatface", 12 * -1)
-    )
-
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
     button_1 = Button(
+        window,
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: add_to_cart("Honey Soy", quantity) or print(f"Added {quantity} Honey Soy to cart"),  # Add Honey Soy to cart with quantity and print confirmation
         relief="flat"
     )
     button_1.place(
@@ -59,10 +57,11 @@ def create_honey_soy_content(window):
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
     button_2 = Button(
+        window,
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: create_cart_content(window),  # Navigate to cart content
+        command=lambda: create_cart_content(window),  # Change this line
         relief="flat"
     )
     button_2.place(
@@ -101,10 +100,12 @@ def create_honey_soy_content(window):
         42.4671630859375,
         417.876708984375,
         anchor="nw",
-        text="Php 999 ",
-        fill="#000000",
+        text=f"Php {honey_soy_price}",  # Use the dynamic price
+        fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
+
+
 
     canvas.create_text(
         35.67236328125,
@@ -143,6 +144,7 @@ def create_honey_soy_content(window):
     button_image_3 = PhotoImage(
         file=relative_to_assets("button_3.png"))
     button_3 = Button(
+        window,
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
@@ -159,6 +161,7 @@ def create_honey_soy_content(window):
     button_image_4 = PhotoImage(
         file=relative_to_assets("button_4.png"))
     button_4 = Button(
+        window,
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,

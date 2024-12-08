@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parent.parent))  # Add parent directory to sys.path
 from bestseller import create_bestseller_content  # Import the function
+from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -36,7 +37,13 @@ def open_cart(window):
 
 
 def create_garlic_parmesan_content(window):
+    items = load_items()  # Refresh items from database
+    garlic_parmesan_price = items["Garlic Parmesan"]["price"]  # Get the price of Garlic Parmesan
+    garlic_parmesan_stock = items["Garlic Parmesan"]["stock"]  # Get the stock of Garlic Parmesan
     print("Creating Garlic Parmesan content...")
+    for widget in window.winfo_children():
+        widget.destroy()  # Clear existing content
+
     window.geometry("507x782")
     window.configure(bg = "#88D498")
 
@@ -51,22 +58,14 @@ def create_garlic_parmesan_content(window):
     )
 
     canvas.place(x = 0, y = 0)
-    canvas.create_text(
-        558.1048583984375,
-        238.7808837890625,
-        anchor="nw",
-        text="Burger",
-        fill="#000000",
-        font=("Abril Fatface", 12 * -1)
-    )
-
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
     button_1 = Button(
+        window,
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: add_to_cart("Garlic Parmesan", quantity) or print(f"Added {quantity} Garlic Parmesan to cart"),  # Add Garlic Parmesan to cart with quantity and print confirmation
         relief="flat"
     )
     button_1.place(
@@ -79,6 +78,7 @@ def create_garlic_parmesan_content(window):
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
     button_2 = Button(
+        window,
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
@@ -121,10 +121,11 @@ def create_garlic_parmesan_content(window):
         42.4671630859375,
         417.8768310546875,
         anchor="nw",
-        text="Php 999 ",
+        text=f"Php {garlic_parmesan_price}",  # Use the dynamic price
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
+
 
     canvas.create_text(
         35.6724853515625,
@@ -163,6 +164,7 @@ def create_garlic_parmesan_content(window):
     button_image_3 = PhotoImage(
         file=relative_to_assets("button_3.png"))
     button_3 = Button(
+        window,
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
@@ -179,6 +181,7 @@ def create_garlic_parmesan_content(window):
     button_image_4 = PhotoImage(
         file=relative_to_assets("button_4.png"))
     button_4 = Button(
+        window,
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
