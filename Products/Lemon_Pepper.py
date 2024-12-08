@@ -23,7 +23,7 @@ def open_other_flavors(window):
         clear_window(window)
         import sys
         sys.path.append(str(Path(__file__).parent.parent))
-        from Other_Flavors import create_other_flavors_content
+        from other_flavors import create_other_flavors_content
         create_other_flavors_content(window)
         print("Other Flavors opened successfully.")
     except Exception as e:

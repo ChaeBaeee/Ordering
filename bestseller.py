@@ -461,7 +461,7 @@ class BestsellerWindow:
             clear_window(self.window)
             import sys
             sys.path.append(str(Path(__file__).parent))
-            from Other_Flavors import create_other_flavors_content
+            from other_flavors import create_other_flavors_content
             create_other_flavors_content(self.window)
             print("Other Flavors opened successfully.")
         except Exception as e:
@@ -473,7 +473,7 @@ class BestsellerWindow:
             clear_window(self.window)
             import sys
             sys.path.append(str(Path(__file__).parent))
-            from Drinks import create_drinks_content
+            from drinks import create_drinks_content
             create_drinks_content(self.window)
             
             # Add a button to go back to the bestseller window

@@ -3,11 +3,13 @@
 
 
 from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).parent.parent))  # Add parent directory to sys.path
+from bestseller import create_bestseller_content  # Import the function
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from bestseller import create_bestseller_content  # Import the function
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame13")
@@ -15,6 +17,22 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame1
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+
+def clear_window(window):
+    for widget in window.winfo_children():
+        widget.destroy()
+
+
+def open_cart(window):
+    try:
+        print("Opening Cart...")
+        clear_window(window)
+        from Cart import create_cart_content
+        create_cart_content(window)
+        print("Cart opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Cart: {e}")
 
 
 def create_garlic_parmesan_content(window):
@@ -64,7 +82,7 @@ def create_garlic_parmesan_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: open_cart(window),  # Change this line
         relief="flat"
     )
     button_2.place(

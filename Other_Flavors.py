@@ -302,7 +302,7 @@ def open_drinks(window):
         clear_window(window)
         import sys
         sys.path.append(str(Path(__file__).parent))
-        from Drinks import create_drinks_content
+        from drinks import create_drinks_content
         create_drinks_content(window)
         
         # Add a button to go back to the other flavors window
