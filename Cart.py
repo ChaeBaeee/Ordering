@@ -3,127 +3,368 @@
 
 
 from pathlib import Path
+
+# from tkinter import *
+# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame4")  # Use relative path
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\build\assets\frame4")
 
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def clear_window(window):
-    for widget in window.winfo_children():
-        widget.destroy()
-
-
-cart_items = []
-
-def add_to_cart(item_name, quantity, total_price):
-    cart_items.append({
-        "item_name": item_name,
-        "quantity": quantity,
-        "total_price": total_price
-    })
-
 def create_cart_content(window):
-    try:
-        print("Starting cart content creation...")
-        window.geometry("507x782")
-        window.configure(bg = "#FFFFFF")
+    window.geometry("507x782")
+    window.configure(bg = "#FFFFFF")
 
-        canvas = Canvas(
-            window,
-            bg = "#FFFFFF",
-            height = 782,
-            width = 507,
-            bd = 0,
-            highlightthickness=0,
-            relief = "ridge"
-        )
+    canvas = Canvas(
+        window,
+        bg = "#FFFFFF",
+        height = 782,
+        width = 507,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge"
+    )
 
-        canvas.place(x = 0, y = 0)
+    canvas.place(x = 0, y = 0)
+    button_image_1 = PhotoImage(
+        file=relative_to_assets("button_1.png"))
+    button_1 = Button(
+        image=button_image_1,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_1 clicked"),
+        relief="flat"
+    )
+    button_1.place(
+        x=255.620849609375,
+        y=717.3338356018066,
+        width=56.0,
+        height=53.0
+    )
 
-        canvas.create_text(
-            253.5,
-            20,
-            anchor="center",
-            text="Shopping Cart",
-            fill="#000000",
-            font=("Arial Bold", 24)
-        )
+    canvas.create_text(
+        205.541259765625,
+        21.412181854248047,
+        anchor="nw",
+        text="Your cart",
+        fill="#000000",
+        font=("Abril Fatface", 21 * -1)
+    )
 
-        y_position = 80
-        total = 0
-        for item in cart_items:
-            canvas.create_text(
-                50,
-                y_position,
-                anchor="w",
-                text=f"{item['item_name']}",
-                fill="#000000",
-                font=("Arial", 16)
-            )
-            canvas.create_text(
-                300,
-                y_position,
-                anchor="w",
-                text=f"x{item['quantity']}",
-                fill="#000000",
-                font=("Arial", 16)
-            )
-            canvas.create_text(
-                400,
-                y_position,
-                anchor="w",
-                text=f"₱{item['total_price']}",
-                fill="#000000",
-                font=("Arial", 16)
-            )
-            total += item['total_price']
-            y_position += 40
+    button_image_2 = PhotoImage(
+        file=relative_to_assets("button_2.png"))
+    button_2 = Button(
+        image=button_image_2,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_2 clicked"),
+        relief="flat"
+    )
+    button_2.place(
+        x=39.069580078125,
+        y=720.2427101135254,
+        width=83.83250427246094,
+        height=38.94280242919922
+    )
 
-        canvas.create_text(
-            50,
-            700,
-            anchor="w",
-            text=f"Total: ₱{total}",
-            fill="#000000",
-            font=("Arial Bold", 18)
-        )
+    button_image_3 = PhotoImage(
+        file=relative_to_assets("button_3.png"))
+    button_3 = Button(
+        image=button_image_3,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_3 clicked"),
+        relief="flat"
+    )
+    button_3.place(
+        x=361.1357421875,
+        y=720.2427101135254,
+        width=130.83250427246094,
+        height=38.94280242919922
+    )
 
-        button_image = PhotoImage(
-            file=relative_to_assets("button_back.png"))
-        button_back = Button(
-            window,
-            image=button_image,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print("Back to previous screen"),  # Define the back button functionality
-            relief="flat"
-        )
-        button_back.place(
-            x=20,
-            y=700,
-            width=100,
-            height=40
-        )
+    canvas.create_rectangle(
+        -0.4979572594165802,
+        697.3169939456391,
+        507.94146728515625,
+        697.9184303283691,
+        fill="#000000",
+        outline="")
 
-        # Keep a reference to the images to prevent garbage collection
-        window.button_images = [button_image]
+    image_image_1 = PhotoImage(
+        file=relative_to_assets("image_1.png"))
+    image_1 = canvas.create_image(
+        99.480224609375,
+        150.44086456298828,
+        image=image_image_1
+    )
 
-        window.resizable(False, False)
-        print("Cart content created successfully.")
-        return True
+    image_image_2 = PhotoImage(
+        file=relative_to_assets("image_2.png"))
+    image_2 = canvas.create_image(
+        99.480224609375,
+        358.7842140197754,
+        image=image_image_2
+    )
 
-    except Exception as e:
-        print(f"Error creating cart content: {str(e)}")
-        return False
+    image_image_3 = PhotoImage(
+        file=relative_to_assets("image_3.png"))
+    image_3 = canvas.create_image(
+        99.480224609375,
+        567.1275367736816,
+        image=image_image_3
+    )
 
-def relative_to_assets(path: str) -> str:
-    return f"C:/Users/pilim/Desktop/Ordering/assets/{path}"
+    canvas.create_text(
+        211.74072265625,
+        76.44086456298828,
+        anchor="nw",
+        text="Burger",
+        fill="#000000",
+        font=("Abril Fatface", 22 * -1)
+    )
 
-# Make the function available for import
-__all__ = ['create_cart_content']
+    canvas.create_text(
+        211.74072265625,
+        122.30537796020508,
+        anchor="nw",
+        text="Php 9999",
+        fill="#DCB21C",
+        font=("Abril Fatface", 20 * -1)
+    )
+
+    canvas.create_text(
+        261.59765625,
+        181.7593879699707,
+        anchor="nw",
+        text="1",
+        fill="#000000",
+        font=("Abril Fatface", 18 * -1)
+    )
+
+    button_image_4 = PhotoImage(
+        file=relative_to_assets("button_4.png"))
+    button_4 = Button(
+        image=button_image_4,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_4 clicked"),
+        relief="flat"
+    )
+    button_4.place(
+        x=289.620849609375,
+        y=181.33383560180664,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    button_image_5 = PhotoImage(
+        file=relative_to_assets("button_5.png"))
+    button_5 = Button(
+        image=button_image_5,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_5 clicked"),
+        relief="flat"
+    )
+    button_5.place(
+        x=211.74072265625,
+        y=181.7593879699707,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    canvas.create_text(
+        211.74072265625,
+        287.07788467407227,
+        anchor="nw",
+        text="Ham Sandwich",
+        fill="#000000",
+        font=("Abril Fatface", 22 * -1)
+    )
+
+    canvas.create_text(
+        211.74072265625,
+        332.9424476623535,
+        anchor="nw",
+        text="Php 9999",
+        fill="#DCB21C",
+        font=("Abril Fatface", 20 * -1)
+    )
+
+    canvas.create_text(
+        261.59765625,
+        394.0951271057129,
+        anchor="nw",
+        text="1",
+        fill="#000000",
+        font=("Abril Fatface", 18 * -1)
+    )
+
+    button_image_6 = PhotoImage(
+        file=relative_to_assets("button_6.png"))
+    button_6 = Button(
+        image=button_image_6,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_6 clicked"),
+        relief="flat"
+    )
+    button_6.place(
+        x=289.620849609375,
+        y=391.33383560180664,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    button_image_7 = PhotoImage(
+        file=relative_to_assets("button_7.png"))
+    button_7 = Button(
+        image=button_image_7,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_7 clicked"),
+        relief="flat"
+    )
+    button_7.place(
+        x=211.74072265625,
+        y=392.3963966369629,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    canvas.create_text(
+        211.74072265625,
+        497.71493911743164,
+        anchor="nw",
+        text="Taco Wraps",
+        fill="#000000",
+        font=("Abril Fatface", 22 * -1)
+    )
+
+    canvas.create_text(
+        211.74072265625,
+        543.5794105529785,
+        anchor="nw",
+        text="Php 9999",
+        fill="#DCB21C",
+        font=("Abril Fatface", 20 * -1)
+    )
+
+    canvas.create_text(
+        261.59765625,
+        604.7320899963379,
+        anchor="nw",
+        text="1",
+        fill="#000000",
+        font=("Abril Fatface", 18 * -1)
+    )
+
+    button_image_8 = PhotoImage(
+        file=relative_to_assets("button_8.png"))
+    button_8 = Button(
+        image=button_image_8,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_8 clicked"),
+        relief="flat"
+    )
+    button_8.place(
+        x=289.620849609375,
+        y=600.3338356018066,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    button_image_9 = PhotoImage(
+        file=relative_to_assets("button_9.png"))
+    button_9 = Button(
+        image=button_image_9,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_9 clicked"),
+        relief="flat"
+    )
+    button_9.place(
+        x=211.74072265625,
+        y=603.0334205627441,
+        width=27.178970336914062,
+        height=27.178970336914062
+    )
+
+    button_image_10 = PhotoImage(
+        file=relative_to_assets("button_10.png"))
+    button_10 = Button(
+        image=button_image_10,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_10 clicked"),
+        relief="flat"
+    )
+    button_10.place(
+        x=197.620849609375,
+        y=717.3338356018066,
+        width=56.0,
+        height=53.0
+    )
+
+    button_image_11 = PhotoImage(
+        file=relative_to_assets("button_11.png"))
+    button_11 = Button(
+        image=button_image_11,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_11 clicked"),
+        relief="flat"
+    )
+    button_11.place(
+        x=428.620849609375,
+        y=64.33383178710938,
+        width=56.0,
+        height=53.0
+    )
+
+    button_image_12 = PhotoImage(
+        file=relative_to_assets("button_12.png"))
+    button_12 = Button(
+        image=button_image_12,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_12 clicked"),
+        relief="flat"
+    )
+    button_12.place(
+        x=428.620849609375,
+        y=287.33383560180664,
+        width=56.0,
+        height=53.0
+    )
+
+    button_image_13 = PhotoImage(
+        file=relative_to_assets("button_13.png"))
+    button_13 = Button(
+        image=button_image_13,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_13 clicked"),
+        relief="flat"
+    )
+    button_13.place(
+        x=428.620849609375,
+        y=493.33383560180664,
+        width=56.0,
+        height=53.0
+    )
+
+    # Keep a reference to the images to prevent garbage collection
+    window.button_images = [button_image_1, button_image_2, button_image_3, button_image_4, button_image_5, button_image_6, button_image_7, button_image_8, button_image_9, button_image_10, button_image_11, button_image_12, button_image_13, image_image_1, image_image_2, image_image_3]
+
+    window.resizable(False, False)
+
+
