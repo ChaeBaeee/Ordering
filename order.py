@@ -6,7 +6,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from bestseller import create_bestseller_content  # Modified import
+from bestseller import create_bestseller_content 
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\build\assets\frame0")
