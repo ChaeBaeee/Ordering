@@ -29,6 +29,18 @@ def open_other_flavors(window):
     except Exception as e:
         print(f"Failed to open Other Flavors: {e}")
 
+def open_cart(window):
+    try:
+        print("Opening Cart...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent.parent))
+        from cart import create_cart_content
+        create_cart_content(window)
+        print("Cart opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Cart: {e}")
+
 def create_lemon_pepper_content(window):
     window.geometry("507x782")
     window.configure(bg = "#FDF5E6")
@@ -59,7 +71,7 @@ def create_lemon_pepper_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: print("button_1 clicked"),  # Update this line
         relief="flat"
     )
     button_1.image = button_image_1  # Keep a reference to the image
@@ -76,7 +88,7 @@ def create_lemon_pepper_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: open_cart(window),  # Update this line
         relief="flat"
     )
     button_2.image = button_image_2  # Keep a reference to the image

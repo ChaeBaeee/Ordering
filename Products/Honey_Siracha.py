@@ -91,7 +91,7 @@ def create_honey_siracha_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: open_cart(window),  # Change this line
+        command=lambda: open_cart(window),  # Update this line
         relief="flat"
     )
     button_2.place(

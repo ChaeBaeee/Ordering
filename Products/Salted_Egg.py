@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
+from cart import create_cart_content  # Import the function
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -186,7 +187,7 @@ def create_salted_egg_content(window):
         image=button_image_5,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_5 clicked"),
+        command=lambda: create_cart_content(window),  # Navigate to cart content
         relief="flat"
     )
     button_5.place(

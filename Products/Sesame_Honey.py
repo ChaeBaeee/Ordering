@@ -48,7 +48,7 @@ def create_sesame_honey_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: print("button_1 clicked"),  # Update this line
         relief="flat"
     )
     button_1.place(
@@ -65,7 +65,7 @@ def create_sesame_honey_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: open_cart(window),
+        command=lambda: open_cart(window),  # Update this line
         relief="flat"
     )
     button_2.place(

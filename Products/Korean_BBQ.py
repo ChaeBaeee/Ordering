@@ -8,6 +8,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content  # Import the function
+from cart import create_cart_content  # Import the function
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -65,7 +66,7 @@ def create_korean_bbq_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: create_cart_content(window),  # Navigate to cart content
         relief="flat"
     )
     button_2.place(

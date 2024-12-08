@@ -65,7 +65,7 @@ def create_orange_glaze_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: open_cart(window),  # Update this line
         relief="flat"
     )
     button_2.place(
@@ -217,3 +217,15 @@ def open_other_flavors(window):
         print("Other Flavors opened successfully.")
     except Exception as e:
         print(f"Failed to open Other Flavors: {e}")
+
+def open_cart(window):
+    try:
+        print("Opening Cart...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent.parent))
+        from cart import create_cart_content
+        create_cart_content(window)
+        print("Cart opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Cart: {e}")

@@ -180,7 +180,7 @@ class BestsellerWindow:
                 image=self.button_images[1],
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda: print("Opening Cart"),
+                command=self.open_cart,  # Change command to self.open_cart
                 relief="flat"
             )
             button_2.image = self.button_images[1]  # Keep a reference to the image
@@ -497,6 +497,18 @@ class BestsellerWindow:
             print("Drinks opened successfully.")
         except Exception as e:
             print(f"Failed to open Drinks: {e}")
+
+    def open_cart(self):
+        try:
+            print("Opening Cart...")
+            clear_window(self.window)
+            import sys
+            sys.path.append(str(Path(__file__).parent))
+            from cart import create_cart_content
+            create_cart_content(self.window)
+            print("Cart opened successfully.")
+        except Exception as e:
+            print(f"Failed to open Cart: {e}")
 
 def create_bestseller_content(window):
     BestsellerWindow(window)

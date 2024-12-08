@@ -253,7 +253,7 @@ def create_other_flavors_content(window):
         image=button_image_9,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_9 clicked"),  # Revert to original command
+        command=lambda: open_cart(window),  # Change command to open_cart
         relief="flat"
     )
     button_9.image = button_image_9  # Keep a reference to the image
@@ -401,3 +401,15 @@ def back_to_order(window):
         print("Order window opened successfully.")
     except Exception as e:
         print(f"Failed to open Order window: {e}")
+
+def open_cart(window):
+    try:
+        print("Opening Cart...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent))
+        from cart import create_cart_content
+        create_cart_content(window)
+        print("Cart opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Cart: {e}")

@@ -4,6 +4,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
+from cart import create_cart_content  # Import the function
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -20,6 +21,9 @@ def relative_to_assets(path: str) -> Path:
 
 def create_buffalo_wings_content(window):
     print("Creating Buffalo Wings content...")
+    for widget in window.winfo_children():
+        widget.destroy()  # Clear existing content
+
     window.geometry("507x782")
     window.configure(bg = "#B22222")
 
@@ -58,7 +62,7 @@ def create_buffalo_wings_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: create_cart_content(window),  # Navigate to cart
         relief="flat"
     )
     button_2.place(
