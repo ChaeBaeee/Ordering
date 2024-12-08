@@ -118,7 +118,7 @@ def create_sesame_honey_content(window):
         font=("Abril Fatface", 20 * -1)
     )
 
-    canvas.create_text(
+    quantity_text = canvas.create_text(
         107.87994384765625,
         724.177001953125,
         anchor="nw",
@@ -127,6 +127,15 @@ def create_sesame_honey_content(window):
         font=("Abril Fatface", 18 * -1)
     )
 
+    def increment_quantity():
+        current_quantity = int(canvas.itemcget(quantity_text, "text"))
+        canvas.itemconfig(quantity_text, text=str(current_quantity + 1))
+
+    def decrement_quantity():
+        current_quantity = int(canvas.itemcget(quantity_text, "text"))
+        if current_quantity > 1:
+            canvas.itemconfig(quantity_text, text=str(current_quantity - 1))
+
     button_image_3 = PhotoImage(
         file=relative_to_assets("button_3.png"))
     button_3 = Button(
@@ -134,9 +143,10 @@ def create_sesame_honey_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_3 clicked"),
+        command=increment_quantity,
         relief="flat"
     )
+    button_3.image = button_image_3  # Keep a reference to the image
     button_3.place(
         x=137.59344482421875,
         y=725.339111328125,
@@ -151,9 +161,10 @@ def create_sesame_honey_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=decrement_quantity,
         relief="flat"
     )
+    button_4.image = button_image_4  # Keep a reference to the image
     button_4.place(
         x=59.45404052734375,
         y=723.639892578125,

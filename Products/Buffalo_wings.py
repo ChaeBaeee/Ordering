@@ -111,11 +111,27 @@ def create_buffalo_wings_content(window):
         font=("Abril Fatface", 20 * -1)
     )
 
-    canvas.create_text(
+    quantity = 1  # Initialize quantity
+
+    def update_quantity_display():
+        canvas.itemconfig(quantity_text, text=str(quantity))
+
+    def increment_quantity():
+        nonlocal quantity
+        quantity += 1
+        update_quantity_display()
+
+    def decrement_quantity():
+        nonlocal quantity
+        if quantity > 1:
+            quantity -= 1
+            update_quantity_display()
+
+    quantity_text = canvas.create_text(
         107.1580810546875,
         724.979736328125,
         anchor="nw",
-        text="1",
+        text=str(quantity),
         fill="#FFFFFF",
         font=("Abril Fatface", 18 * -1)
     )
@@ -127,7 +143,7 @@ def create_buffalo_wings_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_3 clicked"),
+        command=increment_quantity,
         relief="flat"
     )
     button_3.place(
@@ -144,7 +160,7 @@ def create_buffalo_wings_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=decrement_quantity,
         relief="flat"
     )
     button_4.place(
