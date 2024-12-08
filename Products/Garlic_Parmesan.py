@@ -28,7 +28,7 @@ def open_cart(window):
     try:
         print("Opening Cart...")
         clear_window(window)
-        from Cart import create_cart_content
+        from cart import create_cart_content
         create_cart_content(window)
         print("Cart opened successfully.")
     except Exception as e:

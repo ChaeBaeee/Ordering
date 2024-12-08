@@ -224,7 +224,7 @@ def open_cart(window):
         clear_window(window)
         import sys
         sys.path.append(str(Path(__file__).parent.parent))
-        from Cart import create_cart_content
+        from cart import create_cart_content
         create_cart_content(window)
         print("Cart opened successfully.")
     except Exception as e:
