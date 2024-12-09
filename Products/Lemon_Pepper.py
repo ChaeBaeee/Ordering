@@ -6,7 +6,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage  # Ensure all ne
 from tkinter import messagebox  # Import messagebox
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame12")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame12")
 
 DATABASE_PATH = Path("database.json")
 

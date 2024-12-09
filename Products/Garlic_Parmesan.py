@@ -14,7 +14,7 @@ from tkinter import messagebox  # Import messagebox
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame13")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame13")
 
 
 def relative_to_assets(path: str) -> Path:

@@ -11,7 +11,7 @@ from bestseller import create_bestseller_content  # Import the function
 from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame11")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame11")
 
 
 def relative_to_assets(path: str) -> Path:

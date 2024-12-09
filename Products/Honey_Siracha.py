@@ -8,7 +8,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # I
 import json  # Import json module
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame10")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame10")
 
 DATABASE_PATH = Path("database.json")  # Ensure this path is correct
 

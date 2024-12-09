@@ -10,7 +10,7 @@ from cart import create_cart_content, add_to_cart, load_items  # Import the func
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Import messagebox
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame8")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame8")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)

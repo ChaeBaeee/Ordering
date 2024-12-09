@@ -5,9 +5,9 @@ import json
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Ensure all necessary imports are included
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame14")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame14")
 
-DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")
+DATABASE_PATH = DATABASE_PATH = Path("database.json")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)

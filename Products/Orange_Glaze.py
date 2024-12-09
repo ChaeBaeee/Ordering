@@ -5,7 +5,7 @@ import json
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Ensure all necessary imports are included
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets/frame16")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame16")
 
 DATABASE_PATH = Path("database.json")
 
