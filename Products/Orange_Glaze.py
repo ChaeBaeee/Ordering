@@ -67,8 +67,10 @@ def create_orange_glaze_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Orange Glaze", quantity),  # Remove popup message
-        relief="flat"
+        command=lambda: add_to_cart("Orange Glaze", quantity),
+        relief="flat",
+        state="disabled" if orange_glaze_stock == 0 else "normal",
+        text="Unavailable" if orange_glaze_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.83306884765625,

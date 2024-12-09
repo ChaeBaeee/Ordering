@@ -45,8 +45,10 @@ def create_honey_soy_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Honey Soy", quantity),  # Remove popup message
-        relief="flat"
+        command=lambda: add_to_cart("Honey Soy", quantity),
+        relief="flat",
+        state="disabled" if honey_soy_stock == 0 else "normal",
+        text="Unavailable" if honey_soy_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.1580810546875,

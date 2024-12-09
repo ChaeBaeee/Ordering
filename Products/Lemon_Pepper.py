@@ -92,7 +92,9 @@ def create_lemon_pepper_content(window):
         borderwidth=0,
         highlightthickness=0,
         command=lambda: add_to_cart("Lemon Pepper", quantity),  # Remove popup message
-        relief="flat"
+        relief="flat",
+        state="disabled" if lemon_pepper_stock == 0 else "normal",  # Disable if stock is 0
+        text="Unavailable" if lemon_pepper_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.83306884765625,

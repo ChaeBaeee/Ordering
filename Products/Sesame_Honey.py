@@ -67,8 +67,10 @@ def create_sesame_honey_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Sesame Honey", quantity),  # Remove popup message
-        relief="flat"
+        command=lambda: add_to_cart("Sesame Honey", quantity),
+        relief="flat",
+        state="disabled" if sesame_honey_stock == 0 else "normal",
+        text="Unavailable" if sesame_honey_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.83306884765625,

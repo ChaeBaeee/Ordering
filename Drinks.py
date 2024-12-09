@@ -188,7 +188,7 @@ def create_drinks_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=lambda: open_ice_tea(window),  # Open ice_tea.py
         relief="flat"
     )
     button_4.place(
@@ -205,7 +205,7 @@ def create_drinks_content(window):
         image=button_image_5,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_5 clicked"),
+        command=lambda: open_lemonade(window),  # Open lemonade.py
         relief="flat"
     )
     button_5.place(
@@ -222,7 +222,7 @@ def create_drinks_content(window):
         image=button_image_6,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_6 clicked"),
+        command=lambda: open_coca_cola(window),  # Open coca_cola.py
         relief="flat"
     )
     button_6.place(
@@ -239,7 +239,7 @@ def create_drinks_content(window):
         image=button_image_7,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_7 clicked"),
+        command=lambda: open_pepsi(window),  # Open pepsi.py
         relief="flat"
     )
     button_7.place(
@@ -256,7 +256,7 @@ def create_drinks_content(window):
         image=button_image_8,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_8 clicked"),
+        command=lambda: open_root_beer(window),  # Open root_beer.py
         relief="flat"
     )
     button_8.place(
@@ -366,3 +366,66 @@ def back_to_order(window):
         print("Order window opened successfully.")
     except Exception as e:
         print(f"Failed to open Order window: {e}")
+
+def open_ice_tea(window):
+    try:
+        print("Opening Classic Iced Tea...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent / "Products"))
+        from ice_tea import create_ice_tea_content
+        print("Calling create_ice_tea_content...")
+        create_ice_tea_content(window)
+        print("Classic Iced Tea opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Classic Iced Tea: {e}")
+
+def open_coca_cola(window):
+    try:
+        print("Opening Coca-Cola...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent / "Products"))
+        from coca_cola import create_coca_cola_content
+        create_coca_cola_content(window)
+        print("Coca-Cola opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Coca-Cola: {e}")
+
+def open_pepsi(window):
+    try:
+        print("Opening Pepsi...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent / "Products"))
+        from pepsi import create_pepsi_content
+        create_pepsi_content(window)
+        print("Pepsi opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Pepsi: {e}")
+
+def open_root_beer(window):
+    try:
+        print("Opening Root Beer Float...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent / "Products"))
+        from root_beer import create_root_beer_content
+        create_root_beer_content(window)
+        print("Root Beer Float opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Root Beer Float: {e}")
+
+def open_lemonade(window):
+    try:
+        print("Opening Lemonade...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent / "Products"))
+        from lemonade import create_lemonade_content
+        create_lemonade_content(window)
+        print("Lemonade opened successfully.")
+    except KeyError:
+        print("Failed to open Lemonade: 'Lemonade' not found in items")
+    except Exception as e:
+        print(f"Failed to open Lemonade: {e}")

@@ -326,11 +326,23 @@ def create_order_summary_content(window):
         from order_number import create_order_number_content  # Import the function to create order number content
         with open('database.json', 'r+') as f:
             data = json.load(f)
+            
+            # Decrease stock based on items in the cart
+            for item in data['cart']:
+                item_name = item['item']
+                quantity = item['quantity']
+                if item_name in data['items']:
+                    data['items'][item_name]['stock'] -= quantity
+            
+            # Reset the cart
+            data['cart'] = []
+            
             order_number = data.get('order_number', 0) + 1
             data['order_number'] = order_number
             f.seek(0)
             json.dump(data, f, indent=2)
             f.truncate()
+        
         clear_window(window)
         create_order_number_content(window, order_number)
 

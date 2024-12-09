@@ -3,8 +3,7 @@
 
 from pathlib import Path
 from bestseller import create_bestseller_content  # Import the function
-from cart import create_cart_content, load_items, add_to_cart  # Import the functions
-from Garlic_Parmesan import create_garlic_parmesan_content  # Import the function
+from cart import create_cart_content, load_items, add_to_cart  # Import the functions  # Import the function
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -76,7 +75,9 @@ def create_buffalo_wings_content(window):
         borderwidth=0,
         highlightthickness=0,
         command=lambda: add_to_cart("Buffalo Wings", quantity),  # Remove popup message
-        relief="flat"
+        relief="flat",
+        state="disabled" if buffalo_wings_stock == 0 else "normal",  # Disable if stock is 0
+        text="Unavailable" if buffalo_wings_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.1580810546875,

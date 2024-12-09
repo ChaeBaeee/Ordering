@@ -48,7 +48,9 @@ def create_soy_garlic_content(window):
         borderwidth=0,
         highlightthickness=0,
         command=lambda: add_to_cart("Soy Garlic", quantity),  # Remove popup message
-        relief="flat"
+        relief="flat",
+        state="disabled" if soy_garlic_stock == 0 else "normal",  # Disable if stock is 0
+        text="Unavailable" if soy_garlic_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.1580810546875,

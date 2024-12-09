@@ -9,10 +9,12 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import time
 import threading
+from dsa.order_tracking import OrderQueue, Order
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets/frame6")
 
+order_queue = OrderQueue()
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -27,6 +29,11 @@ def reset_to_order(window):
     from order import create_main_window_content  # Import the function to create main window content
     clear_window(window)
     create_main_window_content(window)
+    next_order_number = order_queue.get_next_order_number()
+    if next_order_number:
+        create_order_number_content(window, next_order_number)
+    else:
+        print("No orders to display.")
 
 
 def create_order_number_content(window, order_number):
@@ -66,6 +73,7 @@ def create_order_number_content(window, order_number):
         129.0,
         232.0,
         378.0,
+        342.0,  # Add the missing fourth coordinate
         fill="#D9D9D9",
         outline=""
     )
@@ -78,6 +86,9 @@ def create_order_number_content(window, order_number):
         fill="#000000",
         font=("Abril Fatface", 21 * -1)
     )
+
+    # Update the order status to "Displayed"
+    order_queue.update_order_status(order_number, "Displayed")
 
     canvas.create_text(
         76.0,

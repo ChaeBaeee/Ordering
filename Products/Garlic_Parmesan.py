@@ -67,7 +67,9 @@ def create_garlic_parmesan_content(window):
         borderwidth=0,
         highlightthickness=0,
         command=lambda: add_to_cart("Garlic Parmesan", quantity),  # Remove popup message
-        relief="flat"
+        relief="flat",
+        state="disabled" if garlic_parmesan_stock == 0 else "normal",  # Disable if stock is 0
+        text="Unavailable" if garlic_parmesan_stock == 0 else ""  # Add "Unavailable" text if stock is 0
     )
     button_1.place(
         x=344.8331298828125,
