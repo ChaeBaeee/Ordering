@@ -6,13 +6,13 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Import messagebox
 from bestseller import create_bestseller_content  # Import the function
 from cart import create_cart_content, add_to_cart, load_items  # Import the functions
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame15")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame15")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -53,7 +53,7 @@ def create_korean_bbq_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Korean BBQ", quantity),  # Add Korean BBQ to cart with quantity
+        command=lambda: add_to_cart("Korean BBQ", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(

@@ -3,11 +3,12 @@ from other_flavors import create_other_flavors_content
 from cart import create_cart_content, load_items, add_to_cart
 import json
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage  # Ensure all necessary imports are included
+from tkinter import messagebox  # Import messagebox
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame12")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame12")
 
-DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")
+DATABASE_PATH = Path("database.json")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -90,7 +91,7 @@ def create_lemon_pepper_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Lemon Pepper", quantity) or print(f"Added {quantity} Lemon Pepper to cart"),
+        command=lambda: add_to_cart("Lemon Pepper", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(

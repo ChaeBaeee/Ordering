@@ -1,9 +1,0 @@
-{
-    "cart": [],
-    "items": {
-        "Buffalo Wings": {
-            "price": 200,
-            "stock": 99
-        }
-    }
-}

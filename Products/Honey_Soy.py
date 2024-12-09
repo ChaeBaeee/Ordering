@@ -8,9 +8,10 @@ from cart import create_cart_content, add_to_cart, load_items  # Import the func
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import messagebox  # Import messagebox
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame17")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame17")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -44,7 +45,7 @@ def create_honey_soy_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Honey Soy", quantity) or print(f"Added {quantity} Honey Soy to cart"),  # Add Honey Soy to cart with quantity and print confirmation
+        command=lambda: add_to_cart("Honey Soy", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(

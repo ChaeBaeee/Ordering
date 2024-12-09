@@ -9,10 +9,11 @@ import os
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content  # Import the function
+from payment_method import create_payment_method_content  # Import the function
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\ordering\assets\frame4")
-DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")  # Ensure this path is correct
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame4")
+DATABASE_PATH = OUTPUT_PATH / Path("database.json")  # Ensure this path is correct
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -59,7 +60,7 @@ def update_stock(item_name, quantity):
     if item_name in items:
         items[item_name]["stock"] -= quantity
         save_items(items)
-        print(f"Updated {item_name} stock to {items[item_name]['stock']}.")
+        # Removed the print statement
     else:
         print(f"Item {item_name} not found in items.")
 
@@ -78,24 +79,6 @@ def add_to_cart(item_name, quantity=1):
     cart.append({"item": item_name, "quantity": quantity})
     save_cart(cart)
     print(f"Added {quantity} x {item_name} to cart. Current cart: {cart}")
-
-def checkout():
-    global cart
-    items = load_items()  # Load items from database
-    for item in cart:
-        item_name = item["item"]
-        quantity = item["quantity"]
-        if items[item_name]["stock"] < quantity:
-            print(f"Not enough stock for {item_name}. Available stock: {items[item_name]['stock']}")
-            return
-    for item in cart:
-        item_name = item["item"]
-        quantity = item["quantity"]
-        update_stock(item_name, quantity)
-    cart = []
-    save_cart(cart)
-    print("Checkout successful. Cart is now empty.")
-    create_cart_content(window_instance)  # Refresh the cart content
 
 def create_cart_content(window, page=0):
     global window_instance, items, cart
@@ -187,7 +170,7 @@ def create_cart_content(window, page=0):
         image=button_image_checkout,
         borderwidth=0,
         highlightthickness=0,
-        command=checkout,  # Call the checkout function
+        command=checkout,  # Call the checkout function to navigate to payment method
         relief="flat"
     )
     button_checkout.place(
@@ -334,6 +317,10 @@ def update_cart_content(window, page=0):
         y_position += 50  # Increment y position for the next item
 
     window.after(1000, lambda: update_cart_content(window, page))  # Update cart content every second
+
+def checkout():
+    create_payment_method_content(window_instance)  # Open payment method window
+    window_instance.button_images = window_instance.button_images  # Keep a reference to the images
 
 if __name__ == "__main__":
     window = Tk()

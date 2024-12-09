@@ -2,10 +2,10 @@ from pathlib import Path
 from other_flavors import create_other_flavors_content
 from cart import create_cart_content, load_items, add_to_cart
 import json
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage  # Ensure all necessary imports are included
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Ensure all necessary imports are included
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame14")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame14")
 
 DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")
 
@@ -67,7 +67,7 @@ def create_sesame_honey_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Sesame Honey", quantity) or print(f"Added {quantity} Sesame Honey to cart"),
+        command=lambda: add_to_cart("Sesame Honey", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(

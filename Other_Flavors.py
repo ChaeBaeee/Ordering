@@ -10,7 +10,7 @@ from cart import load_cart, load_items  # Add the missing imports
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame2")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame2")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)

@@ -8,13 +8,13 @@ from Garlic_Parmesan import create_garlic_parmesan_content  # Import the functio
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Import messagebox
 import json  # Import json module
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame9")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame9")
 
-DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")  # Ensure this path is correct
+DATABASE_PATH = Path("database.json")  # Ensure this path is correct
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -75,7 +75,7 @@ def create_buffalo_wings_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Buffalo Wings", quantity) or print(f"Added {quantity} Buffalo Wings to cart"),  # Add Buffalo Wings to cart with quantity and print confirmation
+        command=lambda: add_to_cart("Buffalo Wings", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(

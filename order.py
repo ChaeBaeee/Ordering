@@ -9,7 +9,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\ordering\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame0")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)

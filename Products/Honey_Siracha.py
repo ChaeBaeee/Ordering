@@ -4,13 +4,13 @@ from cart import create_cart_content, load_items, add_to_cart  # Import the func
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox  # Import messagebox
 import json  # Import json module
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\Ordering\assets\frame10")
+ASSETS_PATH = OUTPUT_PATH / Path("assets/frame10")
 
-DATABASE_PATH = Path(r"C:\Users\pilim\Desktop\Ordering\database.json")  # Ensure this path is correct
+DATABASE_PATH = Path("database.json")  # Ensure this path is correct
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -70,7 +70,7 @@ def create_honey_siracha_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Honey Sriracha", quantity) or print(f"Added {quantity} Honey Sriracha to cart"),  # Add Honey Sriracha to cart with quantity and print confirmation
+        command=lambda: add_to_cart("Honey Sriracha", quantity),  # Remove popup message
         relief="flat"
     )
     button_1.place(
