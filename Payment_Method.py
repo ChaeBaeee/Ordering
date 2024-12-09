@@ -3,10 +3,13 @@
 
 
 from pathlib import Path
+import json
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from bestseller import create_bestseller_content
+from order_Summary import create_order_summary_content  # Import the function to create order summary content
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -44,13 +47,30 @@ def create_payment_method_content(window):
         font=("Abril Fatface", 21 * -1)
     )
 
+    def update_payment_method(method):
+        window.payment_method = method
+        create_order_summary_content(window)
+
+    # Load cart data and calculate total
+    with open('database.json', 'r') as f:
+        data = json.load(f)
+    cart = data['cart']
+    items = data['items']
+
+    total = 0
+    for item in cart:
+        item_name = item['item']
+        quantity = item['quantity']
+        price = items[item_name]['price'] * quantity
+        total += price
+
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: create_bestseller_content(window),  # Change command to go back to bestseller
         relief="flat"
     )
     button_1.place(
@@ -74,7 +94,7 @@ def create_payment_method_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
+        command=lambda: update_payment_method(f"{'Credit/Debit':>48}"),  # Update command
         relief="flat"
     )
     button_2.place(
@@ -90,7 +110,8 @@ def create_payment_method_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_3 clicked"),
+        command=lambda: update_payment_method(f"{'E-Wallet':>48}"),
+  # Update command
         relief="flat"
     )
     button_3.place(
@@ -106,7 +127,8 @@ def create_payment_method_content(window):
         494.3175964355469,
         772.9020195007324,
         fill="#1A4524",
-        outline="")
+        outline=""
+    )
 
     canvas.create_text(
         378.806884765625,
@@ -121,7 +143,7 @@ def create_payment_method_content(window):
         378.806884765625,
         737.2295875549316,
         anchor="nw",
-        text="P 999",
+        text=f"₱ {total}",
         fill="#FBFBFB",
         font=("Abril Fatface", 18 * -1)
     )
@@ -132,7 +154,7 @@ def create_payment_method_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=lambda: update_payment_method(f"{'Cash':>48}"),  # Update command
         relief="flat"
     )
     button_4.place(

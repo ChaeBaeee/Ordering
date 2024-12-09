@@ -3,7 +3,6 @@
 
 
 from pathlib import Path
-import os
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -513,7 +512,7 @@ class BestsellerWindow:
             clear_window(self.window)
             import sys
             sys.path.append(str(Path(__file__).parent))
-            from cart import create_cart_content
+            from cart import create_cart_content  # Move import inside the function
             create_cart_content(self.window)
             print("Cart opened successfully.")
         except Exception as e:

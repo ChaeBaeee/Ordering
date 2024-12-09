@@ -9,7 +9,7 @@ import os
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from bestseller import create_bestseller_content  # Import the function
-from payment_method import create_payment_method_content  # Import the function
+from payment_Method import create_payment_method_content
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets/frame4")
@@ -79,6 +79,12 @@ def add_to_cart(item_name, quantity=1):
     cart.append({"item": item_name, "quantity": quantity})
     save_cart(cart)
     print(f"Added {quantity} x {item_name} to cart. Current cart: {cart}")
+
+def checkout():
+    try:
+        create_payment_method_content(window_instance)
+    except ModuleNotFoundError as e:
+        print(f"Failed to import payment_method: {e}")
 
 def create_cart_content(window, page=0):
     global window_instance, items, cart
@@ -317,10 +323,6 @@ def update_cart_content(window, page=0):
         y_position += 50  # Increment y position for the next item
 
     window.after(1000, lambda: update_cart_content(window, page))  # Update cart content every second
-
-def checkout():
-    create_payment_method_content(window_instance)  # Open payment method window
-    window_instance.button_images = window_instance.button_images  # Keep a reference to the images
 
 if __name__ == "__main__":
     window = Tk()

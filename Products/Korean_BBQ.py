@@ -12,7 +12,7 @@ from cart import create_cart_content, add_to_cart, load_items  # Import the func
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("../../assets/frame15")  # Correct the path to assets
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame15")  # Correct the path to assets
 
 
 def relative_to_assets(path: str) -> Path:

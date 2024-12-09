@@ -1,1 +1,73 @@
-{"cart": [], "items": {"Buffalo Wings": {"price": 400, "stock": 86}, "Soy Garlic": {"price": 99, "stock": 50}, "Salted Egg": {"price": 99, "stock": 47}, "Korean BBQ": {"price": 99, "stock": 42}, "Honey Soy": {"price": 99, "stock": 49}, "Garlic Parmesan": {"price": 99, "stock": 40}, "Honey Sriracha": {"price": 99, "stock": 30}, "Lemon Pepper": {"price": 99, "stock": 50}, "Orange Glaze": {"price": 99, "stock": 50}, "Sesame Honey": {"price": 99, "stock": 34}}}
+{
+  "cart": [
+    {
+      "item": "Garlic Parmesan",
+      "quantity": 1
+    },
+    {
+      "item": "Soy Garlic",
+      "quantity": 4
+    },
+    {
+      "item": "Salted Egg",
+      "quantity": 7
+    }
+  ],
+  "items": {
+    "Buffalo Wings": {
+      "price": 400,
+      "stock": 86
+    },
+    "Soy Garlic": {
+      "price": 99,
+      "stock": 50
+    },
+    "Salted Egg": {
+      "price": 99,
+      "stock": 47
+    },
+    "Korean BBQ": {
+      "price": 99,
+      "stock": 42
+    },
+    "Honey Soy": {
+      "price": 99,
+      "stock": 49
+    },
+    "Garlic Parmesan": {
+      "price": 99,
+      "stock": 40
+    },
+    "Honey Sriracha": {
+      "price": 99,
+      "stock": 30
+    },
+    "Lemon Pepper": {
+      "price": 99,
+      "stock": 50
+    },
+    "Orange Glaze": {
+      "price": 99,
+      "stock": 50
+    },
+    "Sesame Honey": {
+      "price": 99,
+      "stock": 34
+    }
+  },
+  "addons": [
+    {
+      "addon": "Crispy Fries",
+      "quantity": 0,
+      "price": 50,
+      "stock": 100
+    },
+    {
+      "addon": "Plain Rice",
+      "quantity": 0,
+      "price": 20,
+      "stock": 200
+    }
+  ],
+  "order_number": 7
+}
