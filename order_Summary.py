@@ -26,6 +26,15 @@ def save_addons_to_database(addons):
         json.dump(data, f, indent=2)
         f.truncate()
 
+def insertion_sort_descending(items):
+    for i in range(1, len(items)):
+        key = items[i]
+        j = i - 1
+        while j >= 0 and key['quantity'] > items[j]['quantity']:
+            items[j + 1] = items[j]
+            j -= 1
+        items[j + 1] = key
+
 def create_order_summary_content(window, page=0):
     for widget in window.winfo_children():
         widget.destroy()  # Clear existing content
@@ -37,7 +46,7 @@ def create_order_summary_content(window, page=0):
         window,
         bg = "#FFFFFF",
         height = 782,
-        width = 507,
+        width=507,
         bd = 0,
         highlightthickness=0,
         relief = "ridge"
@@ -123,6 +132,9 @@ def create_order_summary_content(window, page=0):
     cart = data['cart']
     items = data['items']
     addons = data.get('addons', [])  # Load add-ons from database.json
+
+    # Sort cart by quantity in descending order
+    insertion_sort_descending(cart)
 
     total = 0
 
@@ -243,7 +255,7 @@ def create_order_summary_content(window, page=0):
             def update_quantity_display(q_text=quantity_text, q=quantity):
                 canvas.itemconfig(q_text, text=str(q))
 
-            def increment_quantity(a_name=addon_name, q_text=quantity_text):
+            def increment_quantity(a_name=addon_name, q_text=quantity_text, current_page=page):
                 for addon in addons:
                     if addon['addon'] == a_name:
                         if addon['quantity'] < addon['stock']:  # Check if stock is available
@@ -251,22 +263,22 @@ def create_order_summary_content(window, page=0):
                             update_quantity_display(q_text, addon['quantity'])
                         break
                 save_addons_to_database(addons)
-                create_order_summary_content(window)
+                create_order_summary_content(window, current_page)
 
-            def decrement_quantity(a_name=addon_name, q_text=quantity_text):
+            def decrement_quantity(a_name=addon_name, q_text=quantity_text, current_page=page):
                 for addon in addons:
                     if addon['addon'] == a_name and addon['quantity'] > 0:
                         addon['quantity'] -= 1
                         update_quantity_display(q_text, addon['quantity'])
                         break
                 save_addons_to_database(addons)
-                create_order_summary_content(window)
+                create_order_summary_content(window, current_page)
 
             button_increment = Button(
                 image=button_image_4,
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda a_name=addon_name, q_text=quantity_text: increment_quantity(a_name, q_text),
+                command=lambda a_name=addon_name, q_text=quantity_text, current_page=page: increment_quantity(a_name, q_text, current_page),
                 relief="flat"
             )
             button_increment.place(
@@ -280,7 +292,7 @@ def create_order_summary_content(window, page=0):
                 image=button_image_5,
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda a_name=addon_name, q_text=quantity_text: decrement_quantity(a_name, q_text),
+                command=lambda a_name=addon_name, q_text=quantity_text, current_page=page: decrement_quantity(a_name, q_text, current_page),
                 relief="flat"
             )
             button_decrement.place(
@@ -399,6 +411,17 @@ def create_order_summary_content(window, page=0):
     button_image_10 = PhotoImage(
         file=relative_to_assets("button_8.png")
     )
+
+    if page >= total_cart_pages or page == 0:
+        canvas.create_text(
+            240.620849609375,
+            690.0,  # Position above the next page button
+            anchor="nw",
+            text="Add-Ons",
+            fill="#000000",
+            font=("Abril Fatface", 18 * -1)
+        )
+
     button_8 = Button(
         window,
         image=button_image_10,

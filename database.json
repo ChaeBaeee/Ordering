@@ -3,7 +3,7 @@
   "items": {
     "Buffalo Wings": {
       "price": 400,
-      "stock": 995
+      "stock": 993
     },
     "Classic Iced Tea": {
       "price": 50,
@@ -15,19 +15,19 @@
     },
     "Salted Egg": {
       "price": 99,
-      "stock": 26
+      "stock": 23
     },
     "Korean BBQ": {
       "price": 99,
-      "stock": 42
+      "stock": 37
     },
     "Honey Soy": {
       "price": 99,
-      "stock": 48
+      "stock": 44
     },
     "Garlic Parmesan": {
       "price": 99,
-      "stock": 36
+      "stock": 23
     },
     "Honey Sriracha": {
       "price": 99,
@@ -64,17 +64,17 @@
   },
   "addons": [
     {
-      "addon": "Crispy Fries",
-      "quantity": 0,
-      "price": 79,
-      "stock": 100
-    },
-    {
       "addon": "Plain Rice",
-      "quantity": 0,
+      "quantity": 4,
       "price": 20,
       "stock": 200
+    },
+    {
+      "addon": "Crispy Fries",
+      "quantity": 4,
+      "price": 79,
+      "stock": 100
     }
   ],
-  "order_number": 0
+  "order_number": 4
 }

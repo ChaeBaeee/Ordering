@@ -86,11 +86,19 @@ def checkout():
     except ModuleNotFoundError as e:
         print(f"Failed to import payment_method: {e}")
 
+def bubble_sort_by_quantity(cart):
+    n = len(cart)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if cart[j]["quantity"] < cart[j+1]["quantity"]: 
+                cart[j], cart[j+1] = cart[j+1], cart[j]
+
 def create_cart_content(window, page=0):
     global window_instance, items, cart
     window_instance = window  # Store the window instance
     items = load_items()  # Refresh items from database
     cart = load_cart()  # Refresh cart from database
+    bubble_sort_by_quantity(cart)  # Sort cart items by quantity
     for widget in window.winfo_children():
         widget.destroy()  # Clear existing content
 
@@ -264,6 +272,7 @@ def update_cart_content(window, page=0):
     window_instance = window  # Store the window instance
     items = load_items()  # Refresh items from database
     cart = load_cart()  # Refresh cart from database
+    bubble_sort_by_quantity(cart)  # Sort cart items by quantity
     canvas = window.children['!canvas']  # Correctly reference the canvas
     y_position = 100  # Starting y position for items
     max_y_position = 600  # Maximum y position to avoid crowding
