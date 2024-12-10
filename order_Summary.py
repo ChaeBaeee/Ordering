@@ -415,11 +415,11 @@ def create_order_summary_content(window, page=0):
     if page >= total_cart_pages or page == 0:
         canvas.create_text(
             240.620849609375,
-            690.0,  # Position above the next page button
+            700.0, 
             anchor="nw",
             text="Add-Ons",
             fill="#000000",
-            font=("Abril Fatface", 18 * -1)
+            font=("Abril Fatface", 16 * -1)
         )
 
     button_8 = Button(

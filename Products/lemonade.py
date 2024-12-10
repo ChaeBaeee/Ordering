@@ -115,7 +115,7 @@ def create_lemonade_content(window):
         35.67236328125,
         492.6188049316406,
         anchor="nw",
-        text="Freshly squeezed lemons, lightly sweetened and served over ice for a zesty, refreshing treat.",
+        text="Freshly squeezed lemons, lightly sweetened\nand served over ice for a zesty, refreshing treat.",
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )

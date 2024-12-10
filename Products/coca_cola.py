@@ -115,7 +115,7 @@ def create_coca_cola_content(window):
         35.67236328125,
         492.6188049316406,
         anchor="nw",
-        text="The classic cola, perfectly chilled and fizzy, for an instant refresh.",
+        text="The classic cola, perfectly chilled and fizzy,\n for an instant refresh.",
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
@@ -165,7 +165,7 @@ def create_coca_cola_content(window):
         file=relative_to_assets("button_5.png"))
     button_5 = Button(
         window,
-        image=button_image_5,
+        image=button_image_5,   
         borderwidth=0,
         highlightthickness=0,
         command=lambda: create_drinks_content(window),  # Go back to drinks window

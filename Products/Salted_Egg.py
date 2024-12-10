@@ -95,14 +95,6 @@ def create_salted_egg_content(window):
         font=("Abril Fatface", 20 * -1)
     )
 
-    canvas.create_text(
-        42.4671630859375,
-        450.8766174316406,
-        anchor="nw",
-        text=f"Stock: {salted_egg_stock}",  # Display the stock
-        fill="#000000",
-        font=("Abril Fatface", 20 * -1)
-    )
 
     canvas.create_text(
         35.67242431640625,

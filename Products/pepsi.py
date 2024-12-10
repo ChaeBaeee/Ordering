@@ -111,7 +111,7 @@ def create_pepsi_content(window):
         35.67236328125,
         492.6188049316406,
         anchor="nw",
-        text="Bold, crisp cola flavor in an ice-cold can, ready to energize.",
+        text="Bold, crisp cola flavor in an ice-cold can,\n ready to energize.",
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )

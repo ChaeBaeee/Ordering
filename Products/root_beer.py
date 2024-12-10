@@ -116,7 +116,7 @@ def create_root_beer_content(window):
         35.67236328125,
         492.6188049316406,
         anchor="nw",
-        text="Creamy vanilla ice cream topped with fizzy, rich root beer for a classic, indulgent treat.",
+        text="Creamy vanilla ice cream topped with fizzy,\n rich root beer for a classic, indulgent treat.",
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )

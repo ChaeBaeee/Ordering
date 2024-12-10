@@ -121,7 +121,7 @@ def create_ice_tea_content(window):
         35.67236328125,
         492.6188049316406,
         anchor="nw",
-        text="Refreshing brewed tea, lightly sweetened with a hint of citrus, served over ice.",
+        text="Refreshing brewed tea, lightly sweetened\n with a hint of citrus, served over ice.",
         fill="#FFFFFF",
         font=("Abril Fatface", 20 * -1)
     )
