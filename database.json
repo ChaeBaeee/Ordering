@@ -3,10 +3,10 @@
   "items": {
     "Buffalo Wings": {
       "price": 400,
-      "stock": 0
+      "stock": 995
     },
     "Classic Iced Tea": {
-      "price": 99,
+      "price": 50,
       "stock": 43
     },
     "Soy Garlic": {
@@ -65,16 +65,16 @@
   "addons": [
     {
       "addon": "Crispy Fries",
-      "quantity": 1,
-      "price": 50,
+      "quantity": 0,
+      "price": 79,
       "stock": 100
     },
     {
       "addon": "Plain Rice",
-      "quantity": 1,
+      "quantity": 0,
       "price": 20,
       "stock": 200
     }
   ],
-  "order_number": 22
+  "order_number": 0
 }
