@@ -26,7 +26,7 @@ def save_addons_to_database(addons):
         json.dump(data, f, indent=2)
         f.truncate()
 
-def create_order_summary_content(window):
+def create_order_summary_content(window, page=0):
     for widget in window.winfo_children():
         widget.destroy()  # Clear existing content
 
@@ -126,58 +126,27 @@ def create_order_summary_content(window):
 
     total = 0
 
-    y_position = 150  # Starting y position for items
-    num_items = len(cart)
-    font_size = max(10, 18 - (8 * num_items // 15))  # Adjust font size based on number of items
-    spacing = max(10, 40 - (30 * num_items // 15))  # Adjust spacing based on number of items
-
+    # Calculate total for all cart items
     for item in cart:
         item_name = item['item']
         quantity = item['quantity']
         price = items[item_name]['price'] * quantity
         total += price
 
-        canvas.create_text(
-            44.0,
-            y_position,
-            anchor="nw",
-            text=item_name,
-            fill="#000000",
-            font=("Abril Fatface", font_size * -1)
-        )
+    # Calculate total for all add-ons
+    for addon in addons:
+        total += addon['price'] * addon['quantity']
 
-        canvas.create_text(
-            223.0,
-            y_position,
-            anchor="nw",
-            text=str(quantity),
-            fill="#000000",
-            font=("Abril Fatface", font_size * -1)
-        )
+    y_position = 150  # Starting y position for items
+    font_size = 18  # Fixed font size
+    spacing = 40  # Fixed spacing
+    items_per_page = 10  # Number of items per page
 
-        canvas.create_text(
-            386.0,
-            y_position,
-            anchor="nw",
-            text=f"₱{price}",
-            fill="#000000",
-            font=("Abril Fatface", font_size * -1)
-        )
+    start_index = page * items_per_page
+    end_index = start_index + items_per_page
 
-        y_position += spacing  # Increment y position for next item
-
-    y_position += 20  # Add some space before the add-ons section
-
-    # Display "Add-Ons :" text
-    canvas.create_text(
-        29.0,
-        y_position,
-        anchor="nw",
-        text="Add-Ons :",
-        fill="#000000",
-        font=("Abril Fatface", 21 * -1)
-    )
-    y_position += spacing  # Adjust y position for add-ons
+    # Calculate the total number of pages for cart items
+    total_cart_pages = (len(cart) + items_per_page - 1) // items_per_page
 
     button_image_4 = PhotoImage(
         file=relative_to_assets("button_4.png")
@@ -186,107 +155,142 @@ def create_order_summary_content(window):
         file=relative_to_assets("button_5.png")
     )
 
-    def increment_addon(addon_name):
-        for addon in addons:
-            if addon['addon'] == addon_name:
-                if addon['quantity'] < addon['stock']:  # Check if stock is available
-                    addon['quantity'] += 1
-                break
-        save_addons_to_database(addons)
-        create_order_summary_content(window)
+    if page < total_cart_pages:
+        for item in cart[start_index:end_index]:
+            item_name = item['item']
+            quantity = item['quantity']
+            price = items[item_name]['price'] * quantity
 
-    def decrement_addon(addon_name):
-        for addon in addons:
-            if addon['addon'] == addon_name and addon['quantity'] > 0:
-                addon['quantity'] -= 1
-                break
-        save_addons_to_database(addons)
-        create_order_summary_content(window)
+            canvas.create_text(
+                44.0,
+                y_position,
+                anchor="nw",
+                text=item_name,
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
 
-    for addon in addons:
-        addon_name = addon['addon']
-        quantity = addon['quantity']
-        price = addon['price'] * quantity
-        total += price  # Add add-on price to total
+            canvas.create_text(
+                223.0,
+                y_position,
+                anchor="nw",
+                text=str(quantity),
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
 
+            canvas.create_text(
+                386.0,
+                y_position,
+                anchor="nw",
+                text=f"₱{price}",
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
+
+            y_position += spacing  # Increment y position for next item
+
+    elif page >= total_cart_pages:
+        y_position += 20  # Add some space before the add-ons section
+
+        # Display "Add-Ons :" text
         canvas.create_text(
-            44.0,
+            29.0,
             y_position,
             anchor="nw",
-            text=addon_name,
+            text="Add-Ons :",
             fill="#000000",
-            font=("Abril Fatface", font_size * -1)
+            font=("Abril Fatface", 21 * -1)
         )
+        y_position += spacing  # Adjust y position for add-ons
 
-        quantity_text = canvas.create_text(
-            223.0,
-            y_position,
-            anchor="nw",
-            text=str(quantity),
-            fill="#000000",
-            font=("Abril Fatface", font_size * -1)
-        )
+        addons_per_page = 6  # Number of add-ons per page
+        start_addon_index = (page - total_cart_pages) * addons_per_page
+        end_addon_index = start_addon_index + addons_per_page
 
-        canvas.create_text(
-            386.0,
-            y_position,
-            anchor="nw",
-            text=f"₱{price}",
-            fill="#000000",
-            font=("Abril Fatface", font_size * -1)
-        )
+        for addon in addons[start_addon_index:end_addon_index]:
+            addon_name = addon['addon']
+            quantity = addon['quantity']
+            price = addon['price'] * quantity
 
-        def update_quantity_display(q_text=quantity_text, q=quantity):
-            canvas.itemconfig(q_text, text=str(q))
+            canvas.create_text(
+                44.0,
+                y_position,
+                anchor="nw",
+                text=addon_name,
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
 
-        def increment_quantity(a_name=addon_name, q_text=quantity_text):
-            for addon in addons:
-                if addon['addon'] == a_name:
-                    if addon['quantity'] < addon['stock']:  # Check if stock is available
-                        addon['quantity'] += 1
+            quantity_text = canvas.create_text(
+                223.0,
+                y_position,
+                anchor="nw",
+                text=str(quantity),
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
+
+            canvas.create_text(
+                386.0,
+                y_position,
+                anchor="nw",
+                text=f"₱{price}",
+                fill="#000000",
+                font=("Abril Fatface", font_size * -1)
+            )
+
+            def update_quantity_display(q_text=quantity_text, q=quantity):
+                canvas.itemconfig(q_text, text=str(q))
+
+            def increment_quantity(a_name=addon_name, q_text=quantity_text):
+                for addon in addons:
+                    if addon['addon'] == a_name:
+                        if addon['quantity'] < addon['stock']:  # Check if stock is available
+                            addon['quantity'] += 1
+                            update_quantity_display(q_text, addon['quantity'])
+                        break
+                save_addons_to_database(addons)
+                create_order_summary_content(window)
+
+            def decrement_quantity(a_name=addon_name, q_text=quantity_text):
+                for addon in addons:
+                    if addon['addon'] == a_name and addon['quantity'] > 0:
+                        addon['quantity'] -= 1
                         update_quantity_display(q_text, addon['quantity'])
-                    break
-            save_addons_to_database(addons)
-            create_order_summary_content(window)
+                        break
+                save_addons_to_database(addons)
+                create_order_summary_content(window)
 
-        def decrement_quantity(a_name=addon_name, q_text=quantity_text):
-            for addon in addons:
-                if addon['addon'] == a_name and addon['quantity'] > 0:
-                    addon['quantity'] -= 1
-                    update_quantity_display(q_text, addon['quantity'])
-                    break
-            save_addons_to_database(addons)
-            create_order_summary_content(window)
+            button_increment = Button(
+                image=button_image_4,
+                borderwidth=0,
+                highlightthickness=0,
+                command=lambda a_name=addon_name, q_text=quantity_text: increment_quantity(a_name, q_text),
+                relief="flat"
+            )
+            button_increment.place(
+                x=300.0,
+                y=y_position,
+                width=20,
+                height=20
+            )
 
-        button_increment = Button(
-            image=button_image_4,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda a_name=addon_name, q_text=quantity_text: increment_quantity(a_name, q_text),
-            relief="flat"
-        )
-        button_increment.place(
-            x=300.0,
-            y=y_position,
-            width=20,
-            height=20
-        )
+            button_decrement = Button(
+                image=button_image_5,
+                borderwidth=0,
+                highlightthickness=0,
+                command=lambda a_name=addon_name, q_text=quantity_text: decrement_quantity(a_name, q_text),
+                relief="flat"
+            )
+            button_decrement.place(
+                x=330.0,
+                y=y_position,
+                width=20,
+                height=20
+            )
 
-        button_decrement = Button(
-            image=button_image_5,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda a_name=addon_name, q_text=quantity_text: decrement_quantity(a_name, q_text),
-            relief="flat"
-        )
-        button_decrement.place(
-            x=330.0,
-            y=y_position,
-            width=20,
-            height=20
-        )
-
-        y_position += spacing  # Increment y position for next add-on
+            y_position += spacing  # Increment y position for next add-on
 
     # Display total amount
     canvas.create_text(
@@ -374,7 +378,43 @@ def create_order_summary_content(window):
         height=38.94280242919922
     )
 
-    window.button_images = [button_image_1, button_image_2, button_image_4, button_image_5]  # Keep a reference to the images
+    button_image_9 = PhotoImage(
+        file=relative_to_assets("button_7.png")
+    )
+    button_7 = Button(
+        window,
+        image=button_image_9,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: create_order_summary_content(window, page - 1) if page > 0 else None,
+        relief="flat"
+    )
+    button_7.place(
+        x=180.620849609375,
+        y=717.3338356018066,
+        width=56.0,
+        height=53.0
+    )
+
+    button_image_10 = PhotoImage(
+        file=relative_to_assets("button_8.png")
+    )
+    button_8 = Button(
+        window,
+        image=button_image_10,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: create_order_summary_content(window, page + 1),
+        relief="flat"
+    )
+    button_8.place(
+        x=240.620849609375,
+        y=717.3338356018066,
+        width=56.0,
+        height=53.0
+    )
+
+    window.button_images = [button_image_1, button_image_2, button_image_4, button_image_5, button_image_9, button_image_10]  # Keep a reference to the images
 
 if __name__ == "__main__":
     window = Tk()

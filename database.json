@@ -23,27 +23,27 @@
     },
     "Honey Soy": {
       "price": 99,
-      "stock": 49
+      "stock": 48
     },
     "Garlic Parmesan": {
       "price": 99,
-      "stock": 37
+      "stock": 36
     },
     "Honey Sriracha": {
       "price": 99,
-      "stock": 30
+      "stock": 29
     },
     "Lemon Pepper": {
       "price": 99,
-      "stock": 50
+      "stock": 49
     },
     "Orange Glaze": {
       "price": 99,
-      "stock": 49
+      "stock": 48
     },
     "Sesame Honey": {
       "price": 99,
-      "stock": 34
+      "stock": 32
     },
     "Coca-Cola": {
       "price": 50,
@@ -55,26 +55,26 @@
     },
     "Root Beer Float": {
       "price": 75,
-      "stock": 49
+      "stock": 48
     },
     "Lemonade": {
       "price": 60,
-      "stock": 98
+      "stock": 97
     }
   },
   "addons": [
     {
       "addon": "Crispy Fries",
-      "quantity": 0,
+      "quantity": 1,
       "price": 50,
       "stock": 100
     },
     {
       "addon": "Plain Rice",
-      "quantity": 0,
+      "quantity": 1,
       "price": 20,
       "stock": 200
     }
   ],
-  "order_number": 21
+  "order_number": 22
 }

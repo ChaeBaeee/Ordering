@@ -8,11 +8,14 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\pilim\Desktop\build\assets\frame21")
+ASSETS_PATH = OUTPUT_PATH / Path("../assets/frame21")
 
 
 def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    asset_path = ASSETS_PATH / Path(path)
+    if not asset_path.exists():
+        print(f"Error: Asset not found at {asset_path}")
+    return asset_path
 
 
 def create_coca_cola_content(window):

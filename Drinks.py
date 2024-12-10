@@ -4,13 +4,24 @@
 from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Button, PhotoImage  # Ensure Tk is imported
+from tkinter import Tk, Canvas, Button, PhotoImage
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets/frame3")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+def calculate_order_total():
+    from cart import load_cart, load_items
+    cart = load_cart()
+    items = load_items()
+    total = sum(item["quantity"] * items[item["item"]]["price"] for item in cart)
+    return total
+
+def update_order_total(canvas):
+    total = calculate_order_total()
+    canvas.itemconfig(order_total_text, text=f"P {total}")
 
 def create_drinks_content(window):
     # Reuse the existing code to create the drinks content
@@ -290,7 +301,7 @@ def create_drinks_content(window):
         image=button_image_10,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_10 clicked"),  # Replace X with the correct number
+        command=lambda: open_cart(window),  # Change command to open_cart
         relief="flat"
     )
     button_10.place(
@@ -317,14 +328,19 @@ def create_drinks_content(window):
         font=("Abril Fatface", 18 * -1)
     )
 
-    canvas.create_text(
+    global order_total_text
+    order_total_text = canvas.create_text(
         204.25,
         737.2295532226562,
         anchor="nw",
-        text="P 999",
+        text=f"P {calculate_order_total()}",
         fill="#FBFBFB",
         font=("Abril Fatface", 18 * -1)
     )
+
+    # Call update_order_total whenever the order changes
+    update_order_total(canvas)
+
     window.resizable(False, False)
 
 def clear_window(window):
@@ -429,3 +445,15 @@ def open_lemonade(window):
         print("Failed to open Lemonade: 'Lemonade' not found in items")
     except Exception as e:
         print(f"Failed to open Lemonade: {e}")
+
+def open_cart(window):
+    try:
+        print("Opening Cart...")
+        clear_window(window)
+        import sys
+        sys.path.append(str(Path(__file__).parent))
+        from cart import create_cart_content
+        create_cart_content(window)
+        print("Cart opened successfully.")
+    except Exception as e:
+        print(f"Failed to open Cart: {e}")
