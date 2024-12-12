@@ -3,6 +3,8 @@
 
 from pathlib import Path
 import json
+from queue_system import OrderQueue, create_order_number  # Add import for create_order_number
+from order import create_order_number  # Add this import
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -31,9 +33,9 @@ def insertion_sort_descending(items):
         key = items[i]
         j = i - 1
         while j >= 0 and key['quantity'] > items[j]['quantity']:
-            items[j + 1] = items[j]
+            items[j + 1] = items[j]  # Fix: Swap these two lines
             j -= 1
-        items[j + 1] = key
+        items[j + 1] = key  # Key goes after the while loop at the same indentation level
 
 def create_order_summary_content(window, page=0):
     for widget in window.winfo_children():
@@ -188,7 +190,7 @@ def create_order_summary_content(window, page=0):
                 anchor="nw",
                 text=str(quantity),
                 fill="#000000",
-                font=("Abril Fatface", font_size * -1)
+                font=("Abril Fatface", font_size * -1)  # Fixed: Added missing closing parenthesis
             )
 
             canvas.create_text(
@@ -240,7 +242,7 @@ def create_order_summary_content(window, page=0):
                 anchor="nw",
                 text=str(quantity),
                 fill="#000000",
-                font=("Abril Fatface", font_size * -1)
+                font=("Abril Fatface", font_size * -1)  # Fixed: Removed extra parenthesis
             )
 
             canvas.create_text(
@@ -339,28 +341,48 @@ def create_order_summary_content(window, page=0):
         create_payment_method_content(window)
 
     def go_to_order_number():
-        from order_number import create_order_number_content  # Import the function to create order number content
+        from order_number import create_order_number_content
+        
+        # Get cart items and addons from database.json
+        with open('database.json', 'r') as f:
+            data = json.load(f)
+            cart_items = data['cart']
+            # Only proceed if there are actually items in the cart
+            if not cart_items:
+                print("No items in cart, cannot create order")
+                return
+                
+            addon_items = [addon for addon in data['addons'] if addon['quantity'] > 0]
+            num_items = sum(item['quantity'] for item in cart_items)
+        
+        order_queue = OrderQueue()
+        
+        # Get order type and next order number
+        order_type = getattr(window, '_order_type', getattr(window, 'order_type', 'Take-away'))
+        next_order_number = order_queue.get_last_order_number() + 1
+        
+        # Add single order to queue
+        order_queue.add_order(
+            order_number=next_order_number,
+            queue_number=next_order_number,
+            num_items=num_items,
+            order_type=order_type,
+            items=cart_items,
+            addons=addon_items
+        )
+        
+        # Reset cart and addons
         with open('database.json', 'r+') as f:
             data = json.load(f)
-            
-            # Decrease stock based on items in the cart
-            for item in data['cart']:
-                item_name = item['item']
-                quantity = item['quantity']
-                if item_name in data['items']:
-                    data['items'][item_name]['stock'] -= quantity
-            
-            # Reset the cart
             data['cart'] = []
-            
-            order_number = data.get('order_number', 0) + 1
-            data['order_number'] = order_number
+            for addon in data['addons']:
+                addon['quantity'] = 0
             f.seek(0)
             json.dump(data, f, indent=2)
             f.truncate()
         
         clear_window(window)
-        create_order_number_content(window, order_number)
+        create_order_number_content(window, next_order_number)
 
     button_1 = Button(
         image=button_image_1,

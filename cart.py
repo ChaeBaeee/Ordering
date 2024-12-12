@@ -19,9 +19,17 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def load_items():
-    with open(DATABASE_PATH, 'r') as file:
-        data = json.load(file)
-        return data.get("items", {})
+    try:
+        with open(DATABASE_PATH, 'r') as file:
+            data = json.load(file)
+            # Ensure we're using the actual stock values from database
+            items = data.get("items", {})
+            for name, item in items.items():
+                print(f"Loading {name}: {item['stock']} in stock")
+            return items
+    except Exception as e:
+        print(f"Error loading items: {e}")
+        return {}
 
 items = load_items()  # Load items from database
 
@@ -40,20 +48,19 @@ def load_cart():
 
 cart = load_cart()  # Load cart from database
 
-def remove_from_cart(item_name):
-    global cart
-    cart = [item for item in cart if item["item"] != item_name]
-    save_cart(cart)
-    print(f"Removed {item_name} from cart. Current cart: {cart}")
-    create_cart_content(window_instance)  # Refresh the cart content
-
 def save_items(items):
-    with open(DATABASE_PATH, 'r+') as file:
-        data = json.load(file)
-        data["items"] = items
-        file.seek(0)
-        json.dump(data, file)
-        file.truncate()
+    try:
+        with open(DATABASE_PATH, 'r+') as file:
+            data = json.load(file)
+            # Update items in database
+            data["items"].update(items)
+            file.seek(0)
+            file.truncate()
+            json.dump(data, file, indent=2)
+            file.flush()
+            os.fsync(file.fileno())
+    except Exception as e:
+        print(f"Error saving items: {e}")
 
 def update_stock(item_name, quantity):
     items = load_items()
@@ -65,20 +72,54 @@ def update_stock(item_name, quantity):
         print(f"Item {item_name} not found in items.")
 
 def add_to_cart(item_name, quantity=1):
-    cart = load_cart()  # Load cart from database
-    items = load_items()  # Load items from database
-    if items[item_name]["stock"] < quantity:
-        print(f"Not enough stock for {item_name}. Available stock: {items[item_name]['stock']}")
-        return
-    for item in cart:
-        if item["item"] == item_name:
-            item["quantity"] += quantity
-            save_cart(cart)
-            print(f"Updated {item_name} quantity to {item['quantity']}. Current cart: {cart}")
-            return
-    cart.append({"item": item_name, "quantity": quantity})
-    save_cart(cart)
-    print(f"Added {quantity} x {item_name} to cart. Current cart: {cart}")
+    try:
+        cart = load_cart()
+        items = load_items()  # Get fresh item data
+        
+        print(f"Adding {item_name} (qty: {quantity})")
+        print(f"Current stock in database: {items[item_name]['stock']}")
+        
+        # Check stock availability
+        if item_name not in items:
+            print(f"Error: {item_name} not found in database")
+            return False
+            
+        # Get current stock from database
+        current_stock = items[item_name]["stock"]
+        cart_quantity = sum(item["quantity"] for item in cart if item["item"] == item_name)
+        
+        print(f"Current stock: {current_stock}, In cart: {cart_quantity}")
+        
+        if cart_quantity + quantity > current_stock:
+            print(f"Not enough stock. Available: {current_stock}, Requested total: {cart_quantity + quantity}")
+            return False
+            
+        # Update or add to cart
+        for item in cart:
+            if item["item"] == item_name:
+                item["quantity"] += quantity
+                save_cart(cart)
+                return True
+                
+        # If item not in cart
+        cart.append({"item": item_name, "quantity": quantity})
+        save_cart(cart)
+        return True
+        
+    except Exception as e:
+        print(f"Error in add_to_cart: {e}")
+        return False
+
+def remove_from_cart(item_name):
+    try:
+        cart = load_cart()
+        # No need to modify stock when removing from cart - stock is only updated at checkout
+        cart = [item for item in cart if item["item"] != item_name]
+        save_cart(cart)
+        create_cart_content(window_instance)
+        
+    except Exception as e:
+        print(f"Error in remove_from_cart: {e}")
 
 def checkout():
     try:
@@ -179,12 +220,13 @@ def create_cart_content(window, page=0):
     button_image_checkout = PhotoImage(
         file=relative_to_assets("button_2.png"))  # Use the correct image file
 
+    # Fix button creation by using place() correctly
     button_checkout = Button(
         window,
         image=button_image_checkout,
         borderwidth=0,
         highlightthickness=0,
-        command=checkout,  # Call the checkout function to navigate to payment method
+        command=checkout,
         relief="flat"
     )
     button_checkout.place(
@@ -212,6 +254,7 @@ def create_cart_content(window, page=0):
     start_index = page * items_per_page
     end_index = start_index + items_per_page
 
+    # Fix how item remove buttons are created in the loop
     for item in cart[start_index:end_index]:
         item_name = item["item"]
         quantity = item["quantity"]

@@ -43,7 +43,7 @@ def create_ice_tea_content(window):
         height = 782,
         width = 507,
         bd = 0,
-        highlightthickness = 0,
+        highlightthickness=0,
         relief = "ridge"
     )
 
@@ -58,8 +58,17 @@ def create_ice_tea_content(window):
         command=lambda: add_to_cart("Classic Iced Tea", quantity),  # Remove popup message
         relief="flat",
         state="disabled" if ice_tea_stock == 0 else "normal",  # Disable if stock is 0
-        text="Unavailable" if ice_tea_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if ice_tea_stock == 0 else "SystemButtonFace"
     )
+    if ice_tea_stock == 0:
+        canvas.create_text(
+            344.0,
+            690.0,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
     button_1.place(
         x=344.0,
         y=712.0,

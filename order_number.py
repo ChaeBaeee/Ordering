@@ -6,9 +6,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-import time
-import threading
-from collections import deque
+import json
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets/frame6")
@@ -21,11 +19,18 @@ def clear_window(window):
         widget.destroy()
 
 def reset_to_order(window):
-    from order import create_main_window_content  # Import the function to create main window content
+    from order import create_main_window_content, reset_order
+    reset_order()  # Only reset data, don't close queue window
     clear_window(window)
     create_main_window_content(window)
 
+# Remove reset_order_number function entirely as we don't want to reset order numbers
+# def reset_order_number():
+#     pass
+
 def create_order_number_content(window, order_number):
+    from order import create_queue_system_window, update_queue_display  # Now accessible at module level
+
     window.geometry("507x782")
     window.configure(bg = "#FFFFFF")
 
@@ -103,5 +108,18 @@ def create_order_number_content(window, order_number):
         font=("Abril Fatface", 48 * -1)
     )
 
-    # Start a timer to reset to order.py after 10 seconds
-    threading.Timer(10.0, reset_to_order, args=(window,)).start()
+    # Create a function to safely reset the window from the main thread
+    def safe_reset():
+        if window.winfo_exists():
+            reset_to_order(window)  # This will now properly reset everything
+
+    # Update existing queue window if it exists, or create new one
+    create_queue_system_window()
+    
+    # Schedule the window reset using after() instead of threading.Timer
+    window.after(10000, safe_reset)  # 10000 ms = 10 seconds
+
+# Remove or comment out unused imports
+# import threading
+# from collections import deque
+# import time

@@ -2,24 +2,73 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 from pathlib import Path
+import json
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label, Frame, LabelFrame, Scrollbar, ttk
 from bestseller import create_bestseller_content 
-
+from queue_system import OrderQueue  # Import the OrderQueue class
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets/frame0")
 
+queue_window = None
+
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+def reset_order():
+    # Only reset cart in database.json, preserve order queue
+    with open('database.json', 'r+') as f:
+        data = json.load(f)
+        data['cart'] = []
+        for addon in data['addons']:
+            addon['quantity'] = 0
+        data['order_number'] = 0
+        f.seek(0)
+        json.dump(data, f, indent=2)
+        f.truncate()
+    
+    # Remove the orders.json reset since we want to preserve the queue
+    # Update queue display instead of closing it
+    global queue_window
+    if queue_window and queue_window.winfo_exists():
+        update_queue_display()
 
 def create_main_window():
     window = Tk()
     create_main_window_content(window)
     window.resizable(False, False)
+    window.protocol("WM_DELETE_WINDOW", on_closing)  # Handle window close event
     return window
+
+def on_closing():
+    # Close queue window when main app closes
+    global queue_window
+    if queue_window and queue_window.winfo_exists():
+        queue_window.destroy()
+    
+    # Reset order queue and save empty queue
+    order_queue = OrderQueue()
+    order_queue.reset_queue()
+    
+    # Reset cart and order number in database.json
+    with open('database.json', 'r+') as f:
+        data = json.load(f)
+        data['cart'] = []
+        data['order_number'] = 0
+        for addon in data['addons']:
+            addon['quantity'] = 0
+        f.seek(0)
+        f.truncate()
+        json.dump(data, f, indent=2)
+    
+    # Reset orders.json completely
+    with open('orders.json', 'w') as f:
+        json.dump({"orders": []}, f, indent=2)
+    
+    window.destroy()
 
 def create_main_window_content(window):
     # Clear the window in case it's being reused
@@ -88,36 +137,25 @@ def create_main_window_content(window):
         40.9755859375,
         293.8853759765625,
         224.04293823242188,
-        466.0882263183594,
+        466.0882263183594,  # Add the missing fourth coordinate
         fill="#FFFFFF",
         outline=""
     )
 
-    def open_bestseller():
-        from bestseller import create_bestseller_content  # Import inside function to avoid circular imports
+    def open_bestseller(order_type):
+        from bestseller import create_bestseller_content
+        # Store order type in window and create a new attribute to ensure it persists
+        window.order_type = order_type
+        window._order_type = order_type  # Backup attribute
+        print(f"Setting order type to: {order_type}")  # Debug print
         create_bestseller_content(window)
 
-    button_1 = Button(
-        window,
-        image=window.button_images[0],
-        borderwidth=0,
-        highlightthickness=0,
-        command=open_bestseller,
-        relief="flat"
-    )
-    button_1.place(
-        x=280.072021484375,
-        y=298.6290283203125,
-        width=191.9514617919922,
-        height=180.06068420410156
-    )
-
-    button_2 = Button(
+    button_2 = Button(  # This is the Dine-In button
         window,
         image=window.button_images[1],
         borderwidth=0,
         highlightthickness=0,
-        command=open_bestseller,
+        command=lambda: open_bestseller("Dine-In"),
         relief="flat"
     )
     button_2.place(
@@ -127,7 +165,304 @@ def create_main_window_content(window):
         height=187.41317749023438
     )
 
+    button_1 = Button(  # This is the Take-away button
+        window,
+        image=window.button_images[0],
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: open_bestseller("Take-away"),
+        relief="flat"
+    )
+    button_1.place(
+        x=280.072021484375,
+        y=298.6290283203125,
+        width=191.9514617919922,
+        height=180.06068420410156
+    )
+
+def create_queue_system_window():
+    global queue_window, orders_tree
+    if queue_window is not None and queue_window.winfo_exists():
+        update_queue_display()
+        queue_window.lift()
+        return
+    
+    queue_window = Tk()
+    queue_window.geometry("800x600")
+    queue_window.minsize(800, 600)
+    queue_window.title("Order Queue")
+    
+    # Create main frame
+    main_frame = Frame(queue_window)
+    main_frame.pack(fill='both', expand=True, padx=10, pady=5)
+    
+    # Create single frame for all orders
+    orders_frame = LabelFrame(main_frame, text="Orders", font=("Abril Fatface", 12))
+    orders_frame.pack(fill='both', expand=True, padx=5)
+    
+    # Create headers
+    headers = ["Queue #", "Order #", "Items", "Order Type", "Action"]
+    
+    # Style configuration
+    style = ttk.Style()
+    style.configure("Treeview", rowheight=50)  # Taller rows for buttons
+    
+    # Create treeview
+    orders_tree = ttk.Treeview(orders_frame, columns=headers, show='headings', height=15)
+    
+    # Configure columns with updated widths
+    orders_tree.column("Queue #", width=120, anchor='center')
+    orders_tree.column("Order #", width=120, anchor='center')
+    orders_tree.column("Items", width=120, anchor='center')
+    orders_tree.column("Order Type", width=180, anchor='center')
+    orders_tree.column("Action", width=120, anchor='center')  # Fixed width for Action column
+    
+    for header in headers:
+        orders_tree.heading(header, text=header)
+
+    # Add scrollbar
+    scrollbar = Scrollbar(orders_frame, orient="vertical", command=orders_tree.yview)
+    orders_tree.configure(yscrollcommand=scrollbar.set)
+    
+    orders_tree.pack(side='left', fill='both', expand=True)
+    scrollbar.pack(side='right', fill='y')
+    
+    # Initialize buttons dictionary
+    orders_tree.buttons = {}
+    
+    # Add double click event handler for order details
+    orders_tree.bind("<Double-1>", show_order_details)
+    
+    update_queue_display()
+    queue_window.protocol("WM_DELETE_WINDOW", on_queue_window_close)
+
+def show_order_details(event):
+    """Show order details in a popup window"""
+    tree = event.widget
+    item_id = tree.identify_row(event.y)
+    if item_id:
+        values = tree.item(item_id)['values']
+        if values:
+            queue_num = int(values[0].strip('#'))
+            order_num = int(values[1].strip('#'))
+            
+            popup = Tk()
+            popup.title("Order Details")
+            popup.geometry("400x500")
+            
+            # Create scrollable frame
+            main_frame = Frame(popup)
+            main_frame.pack(fill='both', expand=True, padx=10, pady=5)
+            
+            canvas = Canvas(main_frame)
+            scrollbar = Scrollbar(main_frame, orient="vertical", command=canvas.yview)
+            scrollable_frame = Frame(canvas)
+            
+            scrollable_frame.bind(
+                "<Configure>",
+                lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+            )
+            
+            canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+            canvas.configure(yscrollcommand=scrollbar.set)
+            
+            # Order header
+            Label(scrollable_frame, text="Order Details", font=('Arial', 14, 'bold')).pack(pady=10)
+            Label(scrollable_frame, text=f"Order #{order_num}", font=('Arial', 12)).pack(pady=5)
+            Label(scrollable_frame, text=f"Queue #{queue_num}", font=('Arial', 12)).pack(pady=5)
+            
+            # Get order items from orders.json
+            with open('orders.json', 'r') as f:
+                data = json.load(f)
+                for order in data['orders']:
+                    if order['queue_number'] == queue_num:
+                        # Display items
+                        Label(scrollable_frame, text="Items:", font=('Arial', 12, 'bold')).pack(pady=10)
+                        if 'items' in order:
+                            for item in order['items']:
+                                Label(
+                                    scrollable_frame,
+                                    text=f"• {item['item']} x{item['quantity']}",
+                                    font=('Arial', 11)
+                                ).pack(pady=2)
+                        
+                        # Display add-ons if any
+                        if 'addons' in order and order['addons']:
+                            Label(scrollable_frame, text="\nAdd-ons:", font=('Arial', 12, 'bold')).pack(pady=10)
+                            for addon in order['addons']:
+                                if addon['quantity'] > 0:
+                                    Label(
+                                        scrollable_frame,
+                                        text=f"• {addon['addon']} x{addon['quantity']}",
+                                        font=('Arial', 11)
+                                    ).pack(pady=2)
+                        
+                        Label(scrollable_frame, text=f"\nType: {order['order_type']}", font=('Arial', 12)).pack(pady=5)
+                        break
+            
+            # Pack the scrollbar and canvas
+            canvas.pack(side="left", fill="both", expand=True)
+            scrollbar.pack(side="right", fill="y")
+            
+            # Add process button
+            def confirm_process():
+                process_order(queue_num)
+                popup.destroy()
+            
+            Button(
+                popup,
+                text="Process Order",
+                bg="#4CAF50",
+                fg="white",
+                font=('Arial', 12, 'bold'),
+                command=confirm_process
+            ).pack(pady=20)
+
+def show_items_details(event):
+    tree = event.widget
+    item_id = tree.identify_row(event.y)
+    if item_id:
+        # Create popup window with items details
+        popup = Tk()
+        popup.title("Order Details")
+        popup.geometry("300x200")
+        
+        # Get the order details
+        values = tree.item(item_id)['values']
+        if values:
+            order_num = values[1].strip('#')
+            
+            # Load orders from json to get items details
+            with open('orders.json', 'r') as f:
+                data = json.load(f)
+                for order in data['orders']:
+                    if str(order['order_number']) == str(order_num):
+                        # Display items details
+                        Label(popup, text=f"Order #{order_num}", font=('Arial', 12, 'bold')).pack(pady=5)
+                        Label(popup, text=f"Number of Items: {order['num_items']}").pack()
+                        Label(popup, text=f"Order Type: {order['order_type']}").pack()
+                        break
+        
+        Button(popup, text="Close", command=popup.destroy).pack(pady=10)
+
+def update_queue_display(sort_by="queue", reverse=False):
+    if queue_window is None or not queue_window.winfo_exists():
+        return
+        
+    order_queue = OrderQueue()
+    order_queue.load_orders('orders.json')
+    
+    # Clear existing entries and buttons
+    for item in orders_tree.get_children():
+        # Clean up any existing buttons first
+        if hasattr(orders_tree, 'buttons') and item in orders_tree.buttons:
+            orders_tree.buttons[item].destroy()
+        orders_tree.delete(item)
+    
+    if hasattr(orders_tree, 'buttons'):
+        orders_tree.buttons.clear()
+    else:
+        orders_tree.buttons = {}
+        
+    orders = list(order_queue.queue)
+    if sort_by == "queue":
+        orders.sort(key=lambda x: x[0], reverse=reverse)
+    elif sort_by == "order":
+        orders.sort(key=lambda x: x[1], reverse=reverse)
+    elif sort_by == "items":
+        orders.sort(key=lambda x: x[2], reverse=reverse)
+    
+    for order in orders:
+        item_id = orders_tree.insert('', 'end', values=(
+            f"#{order[0]}",
+            f"#{order[1]}",
+            order[2],
+            order[3],
+            ""
+        ))
+        
+        # Update the layout to get accurate cell positions
+        orders_tree.update_idletasks()
+        
+        # Get the bounding box of the cell in the 'Action' column
+        bbox = orders_tree.bbox(item_id, 'Action')
+        if bbox:
+            x1, y1, width, height = bbox
+
+            # Calculate button position to center it in the cell
+            button_width = 80
+            button_height = 30
+            x = x1 + (width - button_width) // 2
+            y = y1 + (height - button_height) // 2
+
+            # Create the button immediately
+            button = Button(
+                orders_tree,
+                text="Process",
+                bg="#4CAF50",
+                fg="white",
+                relief="raised",
+                font=("Arial", 10, "bold"),
+                command=lambda q=order[0]: process_order(q)
+            )
+
+            button.place(
+                x=x,
+                y=y,
+                width=button_width,
+                height=button_height
+            )
+
+            orders_tree.buttons[item_id] = button
+
+def process_order(queue_num):
+    print(f"Processing order #{queue_num}")  # Debug print
+    with open('orders.json', 'r+') as f:
+        data = json.load(f)
+        # Remove the processed order
+        data['orders'] = [o for o in data['orders'] if o['queue_number'] != queue_num]
+        
+        # Resequence the remaining orders
+        for i, order in enumerate(sorted(data['orders'], key=lambda x: x['queue_number'])):
+            order['queue_number'] = i + 1
+        
+        # Write back to file
+        f.seek(0)
+        f.truncate()
+        json.dump(data, f, indent=2)
+    
+    # Reset order number in database.json
+    with open('database.json', 'r+') as f:
+        data = json.load(f)
+        data['order_number'] = 0
+        f.seek(0)
+        f.truncate()
+        json.dump(data, f, indent=2)
+    
+    update_queue_display()  # Refresh display after processing
+
+def create_order_number():
+    with open('orders.json', 'r+') as f:
+        data = json.load(f)
+        if data['orders']:
+            last_order = max(data['orders'], key=lambda x: x['order_number'])
+            return last_order['order_number'] + 1
+        else:
+            return 1
+
+def on_queue_window_close():
+    global queue_window
+    queue_window.destroy()
+    queue_window = None
+
+def sort_and_display(sort_by):
+    current_sort = getattr(queue_window, 'current_sort', {"column": "queue", "reverse": False})
+    reverse = False if sort_by != current_sort["column"] else not current_sort["reverse"]
+    queue_window.current_sort = {"column": sort_by, "reverse": reverse}
+    update_queue_display(sort_by, reverse)
+
 def main():
+    global window
     window = create_main_window()
     window.mainloop()
 

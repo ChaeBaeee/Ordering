@@ -49,6 +49,7 @@ def create_payment_method_content(window):
 
     def update_payment_method(method):
         window.payment_method = method
+        # Pass through the order type from main window, don't override it
         create_order_summary_content(window)
 
     # Load cart data and calculate total
@@ -94,7 +95,7 @@ def create_payment_method_content(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: update_payment_method(f"{'Credit/Debit':>48}"),  # Update command
+        command=lambda: update_payment_method(f"{'Credit/Debit':>48}"),  # Remove order type setting
         relief="flat"
     )
     button_2.place(
@@ -110,8 +111,7 @@ def create_payment_method_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: update_payment_method(f"{'E-Wallet':>48}"),
-  # Update command
+        command=lambda: update_payment_method(f"{'E-Wallet':>48}"),  # Remove order type setting
         relief="flat"
     )
     button_3.place(
@@ -154,7 +154,7 @@ def create_payment_method_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: update_payment_method(f"{'Cash':>48}"),  # Update command
+        command=lambda: update_payment_method(f"{'Cash':>48}"),  # Remove order type setting
         relief="flat"
     )
     button_4.place(

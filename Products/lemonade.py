@@ -52,8 +52,17 @@ def create_lemonade_content(window):
         command=lambda: add_to_cart("Lemonade", quantity),  # Remove popup message
         relief="flat",
         state="disabled" if lemonade_stock == 0 else "normal",  # Disable if stock is 0
-        text="Unavailable" if lemonade_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if lemonade_stock == 0 else "SystemButtonFace"
     )
+    if lemonade_stock == 0:
+        canvas.create_text(
+            344.0,
+            690.0,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
     button_1.place(
         x=344.0,
         y=712.0,

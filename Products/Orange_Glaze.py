@@ -70,8 +70,17 @@ def create_orange_glaze_content(window):
         command=lambda: add_to_cart("Orange Glaze", quantity),
         relief="flat",
         state="disabled" if orange_glaze_stock == 0 else "normal",
-        text="Unavailable" if orange_glaze_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if orange_glaze_stock == 0 else "SystemButtonFace"
     )
+    if orange_glaze_stock == 0:
+        canvas.create_text(
+            344.83306884765625,
+            690.177001953125,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
     button_1.place(
         x=344.83306884765625,
         y=713.177001953125,

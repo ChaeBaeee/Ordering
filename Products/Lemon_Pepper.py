@@ -94,7 +94,7 @@ def create_lemon_pepper_content(window):
         command=lambda: add_to_cart("Lemon Pepper", quantity),  # Remove popup message
         relief="flat",
         state="disabled" if lemon_pepper_stock == 0 else "normal",  # Disable if stock is 0
-        text="Unavailable" if lemon_pepper_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if lemon_pepper_stock == 0 else "SystemButtonFace"
     )
     button_1.place(
         x=344.83306884765625,
@@ -102,6 +102,16 @@ def create_lemon_pepper_content(window):
         width=138.046875,
         height=39.13037109375
     )
+
+    if lemon_pepper_stock == 0:
+        canvas.create_text(
+            344.83306884765625,
+            690.177001953125,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
 
     button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
     button_2 = Button(

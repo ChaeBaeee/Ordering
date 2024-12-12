@@ -8,7 +8,7 @@ from cart import create_cart_content, load_items, add_to_cart  # Import the func
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, IntVar, Label
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -23,7 +23,7 @@ def create_root_beer_content(window):
     items = load_items()  # Refresh items from database
     root_beer_price = items["Root Beer Float"]["price"]  # Get the price of Root Beer Float
     root_beer_stock = items["Root Beer Float"]["stock"]  # Get the stock of Root Beer Float
-    quantity = 1  # Initialize quantity variable
+    quantity_var = IntVar(value=1)  # Use IntVar for quantity
     print("Creating Root Beer Float content...")
     for widget in window.winfo_children():
         widget.destroy()  # Clear existing content
@@ -38,7 +38,7 @@ def create_root_beer_content(window):
         height = 782,
         width = 507,
         bd = 0,
-        highlightthickness = 0,
+        highlightthickness=0,
         relief = "ridge"
     )
 
@@ -50,10 +50,10 @@ def create_root_beer_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Root Beer Float", quantity),  # Remove popup message
+        command=lambda: add_to_cart("Root Beer Float", quantity_var.get()),  # Remove popup message
         relief="flat",
         state="disabled" if root_beer_stock == 0 else "normal",  # Disable if stock is 0
-        text="Unavailable" if root_beer_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if root_beer_stock == 0 else "SystemButtonFace"
     )
     button_1.place(
         x=344.0,
@@ -61,6 +61,16 @@ def create_root_beer_content(window):
         width=140.0,
         height=41.0
     )
+
+    if root_beer_stock == 0:
+        canvas.create_text(
+            344.0,
+            690.0,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
 
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
@@ -121,13 +131,17 @@ def create_root_beer_content(window):
         font=("Abril Fatface", 20 * -1)
     )
 
-    canvas.create_text(
-        107.158203125,
-        724.979736328125,
-        anchor="nw",
-        text="1",
-        fill="#FFFFFF",
+    quantity_label = Label(
+        window,
+        textvariable=quantity_var,  # Use textvariable to display quantity
+        bg="#8B4513",
+        fg="#FFFFFF",
         font=("Abril Fatface", 18 * -1)
+    )
+    quantity_label.place(
+        x=107.158203125,
+        y=724.979736328125,
+        anchor="nw"
     )
 
     button_image_3 = PhotoImage(
@@ -136,7 +150,7 @@ def create_root_beer_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_3 clicked"),
+        command=lambda: quantity_var.set(quantity_var.get() + 1),  # Increment quantity
         relief="flat"
     )
     button_3.place(
@@ -152,7 +166,7 @@ def create_root_beer_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=lambda: quantity_var.set(max(1, quantity_var.get() - 1)),  # Decrement quantity, minimum 1
         relief="flat"
     )
     button_4.place(

@@ -4,7 +4,7 @@ from cart import create_cart_content, load_items, add_to_cart  # Import the func
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, IntVar, Label
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -22,7 +22,7 @@ def create_coca_cola_content(window):
     items = load_items()  # Refresh items from database
     coca_cola_price = items["Coca-Cola"]["price"]  # Get the price of Coca-Cola
     coca_cola_stock = items["Coca-Cola"]["stock"]  # Get the stock of Coca-Cola
-    quantity = 1  # Initialize quantity variable
+    quantity_var = IntVar(value=1)  # Use IntVar for quantity
     print("Creating Coca-Cola content...")
     for widget in window.winfo_children():
         widget.destroy()  # Clear existing content
@@ -49,11 +49,20 @@ def create_coca_cola_content(window):
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: add_to_cart("Coca-Cola", quantity),  # Remove popup message
+        command=lambda: add_to_cart("Coca-Cola", quantity_var.get()),  # Remove popup message
         relief="flat",
         state="disabled" if coca_cola_stock == 0 else "normal",  # Disable if stock is 0
-        text="Unavailable" if coca_cola_stock == 0 else ""  # Add "Unavailable" text if stock is 0
+        bg="grey" if coca_cola_stock == 0 else "SystemButtonFace"
     )
+    if coca_cola_stock == 0:
+        canvas.create_text(
+            344.0,
+            690.0,  # Positioned above the button
+            anchor="nw",
+            text="Out of Stock",
+            fill="red",
+            font=("Abril Fatface", 16 * -1)
+        )
     button_1.place(
         x=344.0,
         y=712.0,
@@ -120,13 +129,17 @@ def create_coca_cola_content(window):
         font=("Abril Fatface", 20 * -1)
     )
 
-    canvas.create_text(
-        107.158203125,
-        724.979736328125,
-        anchor="nw",
-        text="1",
-        fill="#FFFFFF",
+    quantity_label = Label(
+        window,
+        textvariable=quantity_var,  # Use textvariable to display quantity
+        bg="#C11010",
+        fg="#FFFFFF",
         font=("Abril Fatface", 18 * -1)
+    )
+    quantity_label.place(
+        x=107.158203125,
+        y=724.979736328125,
+        anchor="nw"
     )
 
     button_image_3 = PhotoImage(
@@ -135,7 +148,7 @@ def create_coca_cola_content(window):
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_3 clicked"),
+        command=lambda: quantity_var.set(quantity_var.get() + 1),  # Increment quantity
         relief="flat"
     )
     button_3.place(
@@ -151,7 +164,7 @@ def create_coca_cola_content(window):
         image=button_image_4,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_4 clicked"),
+        command=lambda: quantity_var.set(max(1, quantity_var.get() - 1)),  # Decrement quantity, minimum 1
         relief="flat"
     )
     button_4.place(
